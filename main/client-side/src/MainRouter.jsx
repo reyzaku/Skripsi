@@ -11,6 +11,7 @@ import { useContext } from 'react'
 import { UserContext, UserProvider } from './context/UserContext'
 import Product from './pages/Product'
 import ProductList from './pages/ProductList'
+import Cart from './pages/Cart'
 
 
 
@@ -35,6 +36,8 @@ const MainRouter = () => {
                     <Route exact path='/katalog' element={<ProductList/>} />
                     <Route exact path='/katalog/:category' element={<ProductList/>} />
                     <Route exact path='/produk/:id' element={<Product/>} />
+                    <Route exact path='/cart' element={<Cart/>} />
+
 
                     {/* <LoginRoute exact path="/register" element={Register} />
                     <LoginRoute exact path="/login" element={Login} /> */}

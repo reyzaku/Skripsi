@@ -1,5 +1,6 @@
 import { Add, Remove } from '@mui/icons-material';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
@@ -118,6 +119,67 @@ const Button = styled.button`
 
 
 const Cart = () => {
+
+    const [amount, setAmount] = useState(0)
+    const [cart, setCart] = useState({})
+    let user = localStorage.getItem("user")
+    let userId = user.userId
+    const urlApi = `http://localhost:5000/api/cart/find/${userId}`
+
+    useEffect(() =>{
+        if(cart === null) {
+            axios.get(urlApi)
+            .then(res => {
+                let data = res.data
+                setCart(data.map(e => {
+                    return {
+                        userId: e.userId,
+                        products: {
+                            productId: e.product.productId,
+                            quantity: e.product.quantity,
+                            size: e.product.size,
+                            price: e.product.price,
+                            total: (e.product.price * e.product.quantity)
+                        }
+                    }
+                }))
+            })
+        }
+    }, [cart, setCart]);
+
+    const checkoutHandle = () => {
+        let date = new Date()
+        let day = date.getDate()
+        let month = date.getMonth()
+        let year = date.getFullYear()
+        let rand = Math.floor(Math.random() * 3000)
+        let invoiceNum = `INV-${day}${month}${year}${rand}`
+
+        for(let i = 0; i <= cart.products.length; i++) {
+            setAmount(amount + cart.products.total)
+        }
+
+
+        axios.post("http://localhost:5000/api/order", {
+
+        })
+
+    }
+
+    
+
+    // useEffect(() =>{
+    //     const getProduct = async () => {
+    //         try {
+    //             const res = await axios.get(
+    //                 urlApi
+    //             )
+    //             setProduct(res.data)
+    //         }catch(err){}
+    //     };
+    //     getProduct();
+    // });
+
     return (
         <Container>
             <Navbar/>
@@ -159,7 +221,7 @@ const Cart = () => {
                     <Tax>Rp. 34.000</Tax>
                     <Estimated>Rp. 364.000</Estimated>
                     <Button>Tambah Product</Button>
-                    <Button>Checkout</Button>
+                    <Button onClick={checkoutHandle}>Checkout</Button>
                 </SummaryContainer>
             </Wrapper>
             <Footer/>

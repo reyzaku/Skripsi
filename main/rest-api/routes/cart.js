@@ -3,7 +3,7 @@ const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = requir
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
 
-//Create Product
+//Create Cart
 router.post("/", verifyToken, async (req, res)=>{
     const newCart = new Cart(req.body)
     

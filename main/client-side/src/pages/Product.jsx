@@ -1,11 +1,12 @@
 import { Add, Remove } from '@mui/icons-material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
 import Newsletter from '../component/Newsletter';
+import { UserContext } from '../context/UserContext';
 import Gambar from '../img/ProductDummy1.jpeg';
 
 
@@ -138,22 +139,82 @@ const Button = styled.button`
 const Product = (cat) => {
 
     const {id} = useParams()
+    let navigate = useNavigate()
+    const [user, setUser] = useContext(UserContext)
     const [product, setProduct] = useState({})
+    const [quantity, setQuantity] = useState(1)
+    const [size, setSize] = useState("")
     const urlApi = `http://localhost:5000/api/product/find/${id}`
     useEffect(() =>{
         const getProduct = async () => {
             try {
                 const res = await axios.get(
                     urlApi
-                    // cat 
-                    //  `http://localhost:5000/api/product?category=${cat}`
-                    // : "http://localhost:5000/api/product"
                 )
                 setProduct(res.data)
             }catch(err){}
         };
         getProduct();
     }, [cat]);
+
+    const addToCartHandle = () => {
+        if(user === null) {
+            navigate("/login")
+        }
+        let userId = user.userId
+        let token = user.token
+        if(user === null) {
+            console.log("Not Authorized")
+            navigate("/")
+        } else {
+            axios.post("http://localhost:5000/api/cart",
+            {
+                userId : userId,
+                products : [
+                    {
+                        productId: id,
+                        size: size,
+                        quantity: quantity,
+                        price: product.price
+                    }
+                ]
+            },
+            {
+                headers: { token: `Bearer ${token}` },
+            }).then(
+                alert("Produk Berhasil Ditambahkan Ke Keranjang").console.log("product Added")
+            ).catch((err)=>{
+                alert(err).console.log("Failed")
+            })
+        }
+    }
+
+    const quantityHandle = (type) => {
+        if (type === "dec") {
+            quantity > 1 && setQuantity(quantity - 1);
+        } else {
+            setQuantity(quantity + 1);
+        }
+    };
+
+    const changeHandle = (event) =>{
+        let value = event.target.value
+        let name = event.target.name
+
+        switch(name){
+            case "sizeContainer" : {
+                setSize(value)
+                break;
+            }
+            case "quantityContainer" : {
+                setQuantity(value)
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+    }
     
 
     return (
@@ -178,23 +239,23 @@ const Product = (cat) => {
                   <VariantContainer>
                       <SizeSelector>
                         <SizeText>Pilih Ukuran :</SizeText>  
-                        <FilterSelection>    
-                            <Option>S</Option>
-                            <Option>M</Option>
-                            <Option>L</Option>
-                            <Option>XL</Option>
+                        <FilterSelection onChange={changeHandle} name="sizeContainer">    
+                            <Option value="S" defaultValue={size}>S</Option>
+                            <Option value="M">M</Option>
+                            <Option value="L">L</Option>
+                            <Option value="XL">XL</Option>
                         </FilterSelection>
                       </SizeSelector>
                   </VariantContainer>
                   <AmountContainer>
                       <AmountText>Jumlah :</AmountText>
                       <AmountButton>
-                            <RemoveAmount><Remove/></RemoveAmount>
-                            <Amount>1</Amount>
-                            <AddAmount><Add/></AddAmount>
+                            <RemoveAmount onClick={() => quantityHandle("dec")}><Remove/></RemoveAmount>
+                            <Amount>{quantity}</Amount>
+                            <AddAmount onClick={() => quantityHandle("inc")}><Add/></AddAmount>
                       </AmountButton>
                   </AmountContainer>
-                  <Button>Add Product to Cart</Button>
+                  <Button onClick={addToCartHandle}>Add Product to Cart</Button>
               </InfoContainer>
           </Wrapper>
           <Newsletter/>
