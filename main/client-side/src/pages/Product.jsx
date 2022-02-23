@@ -145,6 +145,7 @@ const Product = (cat) => {
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState("")
     const urlApi = `http://localhost:5000/api/product/find/${id}`
+    
     useEffect(() =>{
         const getProduct = async () => {
             try {
@@ -167,24 +168,25 @@ const Product = (cat) => {
             console.log("Not Authorized")
             navigate("/")
         } else {
-            axios.post("http://localhost:5000/api/cart",
+            axios.put(`http://localhost:5000/api/cart/add/${userId}`,
+            
             {
                 userId : userId,
-                products : [
+                products : 
                     {
-                        productId: id,
+                        productId: product._id,
                         size: size,
                         quantity: quantity,
-                        price: product.price
+                        price: product.price,
+                        image: product.image
                     }
-                ]
             },
             {
-                headers: { token: `Bearer ${token}` },
+                headers: { token: `Bearer ${token}` }
             }).then(
-                alert("Produk Berhasil Ditambahkan Ke Keranjang").console.log("product Added")
+                navigate("/cart")
             ).catch((err)=>{
-                alert(err).console.log("Failed")
+                alert(err)
             })
         }
     }

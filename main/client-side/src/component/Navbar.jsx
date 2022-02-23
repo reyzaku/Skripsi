@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import SearchIcon from '@mui/icons-material/Search';
 import { Badge } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div `
     height: 100px;
@@ -95,7 +96,9 @@ const Navbar = () => {
                     </MenuItem>
                     <MenuItem>
                         <Badge badgeContent={4} color="primary">
-                            <ShoppingCartOutlinedIcon color="action" />
+                            <Link to={"/cart"}>
+                                <ShoppingCartOutlinedIcon color="action" />
+                            </Link>
                         </Badge>
                     </MenuItem>
                 </Right>

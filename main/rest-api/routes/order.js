@@ -2,7 +2,8 @@ const Order = require("../models/Order")
 const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = require("./verifyToken");
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
-const midtransClient = require('midtrans-client')
+const midtransClient = require('midtrans-client');
+const Cart = require("../models/Cart");
 
 //Checkout (Get Midtrans Token)
 let snap = new midtransClient.Snap({
@@ -11,13 +12,65 @@ let snap = new midtransClient.Snap({
     clientKey: ''
 });
 
-//Create Product
-router.post("/", verifyToken, async (req, res)=>{
+
+//Create ordrr + Req Midtrans Token
+router.post("/add", verifyToken, async (req, res)=>{
     const newOrder = new Order(req.body)
-    
+
+    let snap = new midtransClient.Snap({
+        isProduction: false,
+        serverKey : 'MIDTRANS_SERVER_KEY',
+        clientKey : 'MIDTRANS_CLIENT_KEY'
+    })
+
+    const parameter = {
+        "transaction_details": {
+            "order_id": req.body.invoiceId,
+            "gross_amount": req.body.totalprice
+        },
+        "credit_card": {
+            "secure" : true
+        }
+    }
+
+
     try{
+        snap.createTransaction(parameter).then((transaction)=>{
+            let transactionToken = transaction.token;
+            newOrder.paymentToken = (transactionToken)
+        })
+
         const savedOrder = await newOrder.save();
         res.status(200).json(savedOrder);
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
+
+router.put("/add/address/:invoiceId", verifyToken, async (req, res) =>{
+    let address = { "address" : req.body.address}
+    let customer = { "name": req.body.customerDetail.name, "phone": req.body.customerDetail.phone, "email": req.body.customerDetail.email,}
+    const addAddress = await Cart.findByIdAndUpdate(
+        {
+            userId: req.body.invoiceId
+        },
+        {
+            $push: {address: address, customerDetail: [customer]}
+        }
+    )
+
+    try{
+        res.status(200).json(addAddress)
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
+
+//Find Invoice 
+router.get("/invoice/find/:invoiceId", verifyToken, async (req, res) => {
+    try {
+        const invoice = await Order.find({invoiceId: req.params.invoiceId})
+        res.status(200).json(invoice)
     }catch(err){
         res.status(500).json(err)
     }

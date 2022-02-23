@@ -22,16 +22,13 @@ const ProductGrid = (cat, sort) => {
             try {
                 const res = await axios.get(
                     urlApi
-                    // cat 
-                    //  `http://localhost:5000/api/product?category=${cat}`
-                    // : "http://localhost:5000/api/product"
                 )
                 setProduct(res.data)
             }catch(err){}
         };
         getProduct();
     }, [cat]);
-
+    console.log(product)
     // useEffect(() => {
     //     if (sort === "newest") {
     //         setFilterProduct((prev) =>

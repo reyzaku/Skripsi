@@ -15,6 +15,19 @@ router.post("/", verifyToken, async (req, res)=>{
     }
 })
 
+router.put("/add/:userId", verifyToken, async (req, res)=>{
+    let product = { "productId": req.body.products.productId, "size": req.body.products.size, "quantity": req.body.products.quantity, "price": req.body.products.price, "image": req.body.products.image}
+    const addProduct = await Cart.findOneAndUpdate(
+        {userId: req.body.userId }, {$push: {products:[product]}}
+    )
+    
+    try{
+        res.status(200).json(addProduct);
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
+
 // Put (Update Account Information)
 router.put("/:id", verifyTokenAndAuthorization, async (req, res)=>{
     try{
@@ -42,10 +55,10 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res)=>{
     }
 });
 
-//Get (Querying User Account (admin only))
-router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res)=>{
+//Get (Querying User Cart)
+router.get("/find/:userId", verifyToken, async (req, res)=>{
     try{
-        const cart = await Cart.findOne({userId: req.params.userId})
+        const cart = await Cart.find({userId: req.params.userId})
         res.status(200).json(cart);
 
     }catch(err){
