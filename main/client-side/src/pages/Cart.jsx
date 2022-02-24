@@ -131,38 +131,38 @@ const Cart = (cat) => {
     let navigate = useNavigate()
     const urlApi = `http://localhost:5000/api/cart/find/${userId}`
 
-    useEffect(() =>{
+    useEffect(() => {
         // if(cart == null) {
-            axios.get(urlApi, {headers: { token: `Bearer ${token}` }}).then(res => {
-                let data = res.data
-                console.log(data)
-                setCart(data)
-            })
-        }, []);
-        // }
-        // const getCart = async () => {
-        //     try {
-        //         const res = await axios.get(
-        //             urlApi, {headers: { token: `Bearer ${token}` }}
-        //         )
-        //         setCart(
-        //             res.data.map((product) => product.products.map((item) => {
-        //                 return {
-        //                     productId: item.productId,
-        //                     size: item.size,
-        //                     image: item.image,
-        //                     quantity: item.quantity,
-        //                     price: item.price,
-        //                     total: item.price * item.quantity
-        //                 }
-        //             }))
-        //         )
+        axios.get(urlApi, { headers: { token: `Bearer ${token}` } }).then(res => {
+            let data = res.data
+            console.log(data)
+            setCart(data)
+        })
+    }, []);
+    // }
+    // const getCart = async () => {
+    //     try {
+    //         const res = await axios.get(
+    //             urlApi, {headers: { token: `Bearer ${token}` }}
+    //         )
+    //         setCart(
+    //             res.data.map((product) => product.products.map((item) => {
+    //                 return {
+    //                     productId: item.productId,
+    //                     size: item.size,
+    //                     image: item.image,
+    //                     quantity: item.quantity,
+    //                     price: item.price,
+    //                     total: item.price * item.quantity
+    //                 }
+    //             }))
+    //         )
 
-                
-        //     }catch(err){}
-        // };
-        // getCart();
-        
+
+    //     }catch(err){}
+    // };
+    // getCart();
+
     // for(let i = 0; i <= cart.length; i++) {
     //     cart.map(subArray => subArray.products.map((item) => {
     //         return (
@@ -181,11 +181,11 @@ const Cart = (cat) => {
     const format = numb.toString().split('').reverse().join('');
     const convert = format.match(/\d{1,3}/g);
     const rupiah = 'Rp ' + convert.join('.').split('').reverse().join('')
-    
+
 
     console.log(rupiah)
-    
-    let tax = (amount * 10)/100
+
+    let tax = (amount * 10) / 100
     console.log(cart)
     const checkoutHandle = () => {
         let date = new Date()
@@ -196,7 +196,7 @@ const Cart = (cat) => {
         let invoiceNum = `INV-${day}${month}${year}${rand}`
 
         console.log(`amount: ${amount}`)
-        
+
         axios.post("http://localhost:5000/api/order", {
             userId: user.userId,
             invoiceId: invoiceNum,
@@ -207,42 +207,42 @@ const Cart = (cat) => {
             }],
             gross_amount: amount,
         },
-        {
-            headers: {token: `Bearer ${token}`},
-        }).then(
-            navigate(`/checkout/form/${invoiceNum}`)
-        ).catch((err)=>{
-            alert("Gagal").json(err)
-        })
+            {
+                headers: { token: `Bearer ${token}` },
+            }).then(
+                navigate(`/checkout/form/${invoiceNum}`)
+            ).catch((err) => {
+                alert("Gagal").json(err)
+            })
 
     }
 
     return (
         <Container>
             {console.log(cart)}
-            <Navbar/>
+            <Navbar />
             <Title>Keranjang Kamu</Title>
             <Wrapper>
-            {/* {console.log(`id: ${index + 1} productId: ${item.productId} price: Rp. ${item.price} size: ${item.size} quantity: ${item.quantity} total: ${item.total}`)} */}
+                {/* {console.log(`id: ${index + 1} productId: ${item.productId} price: Rp. ${item.price} size: ${item.size} quantity: ${item.quantity} total: ${item.total}`)} */}
                 <ProductContainer>
                     <Subtitle>Daftar Produk</Subtitle>
-                    {cart.map(subArray => subArray.products.map((item, index) => {       
+                    {cart.map(subArray => subArray.products.map((item, index) => {
                         return (
                             <ProductCard key={index + 1}>
-                                <Image src={item.image}/>
+                                <Image src={item.image} />
                                 <Detail>
                                     <ProductTitle>Armany Blue 1</ProductTitle>
                                     <Variant>Ukuran : {item.size}</Variant>
                                     <Price>
                                     </Price>
                                     <Counter>
-                                        <RemoveAmount><Remove/></RemoveAmount>
+                                        <RemoveAmount><Remove /></RemoveAmount>
                                         <Count>{item.quantity}</Count>
-                                        <AddAmount><Add/></AddAmount>
+                                        <AddAmount><Add /></AddAmount>
                                     </Counter>
                                 </Detail>
                             </ProductCard>
-                        )                 
+                        )
                     }))}
                 </ProductContainer>
                 <SummaryContainer>
@@ -256,7 +256,7 @@ const Cart = (cat) => {
                     <Button onClick={checkoutHandle}>Checkout</Button>
                 </SummaryContainer>
             </Wrapper>
-            <Footer/>
+            <Footer />
         </Container>
 
     );

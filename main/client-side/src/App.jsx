@@ -9,11 +9,12 @@ import CheckoutOne from "./pages/CheckoutOne"
 import CheckoutTwo from "./pages/CheckoutTwo";
 import CheckoutThree from "./pages/CheckoutThree";
 import MainRouter from "./MainRouter";
+import { UserProvider } from "./context/UserContext";
 
 const App = () => {
-  return <div>
-      <MainRouter/>
-  </div>;
+  return <UserProvider>
+    <MainRouter />
+  </UserProvider>;
 };
 
 export default App;

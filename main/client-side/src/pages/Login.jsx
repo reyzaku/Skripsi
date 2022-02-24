@@ -1,4 +1,4 @@
- import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -72,7 +72,7 @@ const Text = styled.p`
 
 const Login = () => {
     const [user, setUser] = useContext(UserContext)
-    const [input, setInput] = useState({username: "", password: ""})
+    const [input, setInput] = useState({ username: "", password: "" })
     let navigate = useNavigate();
     const LoginHandle = (event) => {
         event.preventDefault()
@@ -80,52 +80,53 @@ const Login = () => {
             username: input.username,
             password: input.password
         }).then(
-            (res)=>{
+            (res) => {
                 console.log(res)
                 var user = res.data
                 var token = res.data.accessToken
-                var currentUser = {username: user.username, userId: user._id, token}
+                var currentUser = { username: user.username, userId: user._id, token }
                 setUser(currentUser)
                 localStorage.setItem("user", JSON.stringify(currentUser))
                 navigate("/")
             }
-        ).catch((err)=>{
+        ).catch((err) => {
             alert("password atau username Salah")
         })
     }
 
-    const changeHandle = (event) =>{
+
+    const changeHandle = (event) => {
         let value = event.target.value
         let name = event.target.name
-        switch(name){
+        switch (name) {
             case "username": {
-                setInput({...input, username: value})
+                setInput({ ...input, username: value })
                 break;
             }
             case "password": {
-                setInput({...input, password: value})
+                setInput({ ...input, password: value })
                 break;
             }
-            default:{break;}
+            default: { break; }
         }
     }
 
     return (
-      <Container>
-          {/* <Navbar/> */}
-          <Wrapper>
-              <Title>Masuk ke Aisha Collection</Title>
-              <Form>
-                  <Input placeholder='Masukan E-mail' name="username" value={input.username} onChange={changeHandle}></Input>
-                  <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={changeHandle}></Input>
-                  <Button onClick={LoginHandle}>MASUK</Button>
-                  <Text>Atau</Text>
-                  <ButtonTwo>BUAT AKUN BARU</ButtonTwo>
-                  <Text>Lupa Password?</Text>
-              </Form>
-          </Wrapper>
-      </Container>
-  );
+        <Container>
+            {/* <Navbar/> */}
+            <Wrapper>
+                <Title>Masuk ke Aisha Collection</Title>
+                <Form>
+                    <Input placeholder='Masukan E-mail' name="username" value={input.username} onChange={changeHandle}></Input>
+                    <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={changeHandle}></Input>
+                    <Button onClick={LoginHandle}>MASUK</Button>
+                    <Text>Atau</Text>
+                    <ButtonTwo>BUAT AKUN BARU</ButtonTwo>
+                    <Text>Lupa Password?</Text>
+                </Form>
+            </Wrapper>
+        </Container>
+    );
 };
 
 export default Login;

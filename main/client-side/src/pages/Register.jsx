@@ -1,6 +1,9 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../component/Navbar';
+import { UserContext } from '../context/UserContext';
 
 const Container = styled.div`
     width: 100vw;
@@ -67,24 +70,83 @@ const Text = styled.p`
 `
 
 const Register = () => {
-  return (
-      <Container>
-          {/* <Navbar/> */}
-          <Wrapper>
-              <Title>Buat Akun Baru</Title>
-              <Form>
-                  <Input placeholder='Masukan Nama Depan'></Input>
-                  <Input placeholder='Masukan Nama Belakang'></Input>
-                  <Input placeholder='Masukan E-mail'></Input>
-                  <Input placeholder='Masukan Password' type="password"></Input>
-                  <Input placeholder='Masukan Password Ulang' type="password"></Input>
-                  <Button>BUAT AKUN</Button>
-                  <Text>Atau</Text>
-                  <ButtonTwo>MASUK</ButtonTwo>
-              </Form>
-          </Wrapper>
-      </Container>
-  );
+
+    const [user, setUser] = useContext(UserContext)
+    const [input, setInput] = useState({
+        username: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        email: ""
+    })
+    let navigate = useNavigate();
+
+    const RegisterHandle = (event) => {
+        console.log(input)
+        // axios.post("http://localhost:5000/api/auth/register", {
+        //     username: input.username,
+        //     password: input.password,
+        //     email: input.email
+        // }).then(
+        //     (res) => {
+        //         navigate("/login")
+        //     }
+        // ).catch((err) => {
+        //     console.log(err);
+        // })
+    }
+
+    const ChangeHandle = (event) => {
+        let value = event.target.value
+        let name = event.target.name
+        console.log(input)
+        switch (name) {
+            case "username": {
+                setInput({ ...input, username: value })
+                break;
+            }
+            case "first-name": {
+                setInput({ ...input, firstname: value })
+                break;
+            }
+            case "last-name": {
+                setInput({ ...input, lastname: value })
+                break;
+            }
+            case "password": {
+                setInput({ ...input, password: value })
+                break;
+            }
+            case "email": {
+                setInput({ ...input, email: value })
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+
+    return (
+        <Container>
+            {/* <Navbar/> */}
+            <Wrapper>
+                <Title>Buat Akun Baru</Title>
+                <Form>
+                    <Input placeholder='Masukan Username' name="username" value={input.username} onChange={ChangeHandle}></Input>
+                    <Input placeholder='Masukan Nama Depan' name="first-name" value={input.firstname} onChange={ChangeHandle}></Input>
+                    <Input placeholder='Masukan Nama Belakang' name="last-name" value={input.lastname} onChange={ChangeHandle}></Input>
+                    <Input placeholder='Masukan E-mail' name="email" value={input.email} onChange={ChangeHandle}></Input>
+                    <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={ChangeHandle}></Input>
+                    <Button onClick={RegisterHandle}>BUAT AKUN</Button>
+                    <Text>Atau</Text>
+                    <Link to={"/login"}>
+                        <ButtonTwo>MASUK</ButtonTwo>
+                    </Link>
+                </Form>
+            </Wrapper>
+        </Container>
+    );
 };
 
 export default Register;
