@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
 import styled from 'styled-components'
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 const Container = styled.div``
 const Wrapper = styled.div`
@@ -101,6 +104,28 @@ const Button = styled.button`
 
 
 const CheckoutOne = () => {
+
+    const [user, setUser] = useContext(UserContext)
+    const [invoice, setInvoice] = useState({})
+    const [cust, setCust] = useState({})
+    const [address, setAddress] = useState("")
+    const {invoiceId} = useParams()
+    let token = user.token
+    const urlApi = `http://localhost:5000/api/order/invocie/find/${invoiceId}`
+
+    useEffect(() =>{
+        axios.get(urlApi, {headers: { token: `Bearer ${token}` }}).then(res => {
+            let data = res.data
+            console.log(data)
+            setInvoice(data)
+        })
+    }, []);
+
+
+    const changeHandle = (event) => {
+        
+    }
+
     return (
         <Container>
             <Navbar/>

@@ -1,7 +1,9 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
+import { UserContext } from '../context/UserContext';
 import ProfileImage from "../img/Profile.jpg";
 
 const Container = styled.div``
@@ -81,14 +83,33 @@ const NavButton = styled.button`
 
 
 const Profile = () => {
+    const [user, setUser] = useContext(UserContext)
+    const [profile, setProfile] = useState({})
+    const userId = user.userId
+    const token = user.token
+    const apiUrl = `http://localhost:5000/api/user/find/${userId}`
+
+    useEffect(() =>{
+        const getProfile = async () => {
+            try {
+                const res = await axios.get(
+                    apiUrl, { headers: { token: `Bearer ${token}` }}
+                )
+                setProfile(res.data.others)
+                console.log(res.data)
+            }catch(err){}
+        };
+        getProfile();
+    }, []);
+
     return (
         <Container>
             <Navbar/>
             <Wrapper>
                 <ProfileCard>
                     <Image src={ProfileImage}/>
-                    <Name>M Rafi Abdillah</Name>
-                    <Email>rabdilah7@gmail.com</Email>
+                    <Name>{profile.username}</Name>
+                    <Email>{profile.email}</Email>
                     <Button>Edit Profile</Button>
                 </ProfileCard>
 
@@ -103,12 +124,6 @@ const Profile = () => {
                         <NavTitle>Alamat Saya</NavTitle>
                         <Count>10</Count>
                         <NavButton nav>Lihat Daftar Alamat</NavButton>
-                    </NavCard>
-
-                    <NavCard>
-                        <NavTitle>Keranjang Saya</NavTitle>
-                        <Count>10</Count>
-                        <NavButton nav>Lihat Keranjang</NavButton>
                     </NavCard>
                 </ProfileNav>
             </Wrapper>

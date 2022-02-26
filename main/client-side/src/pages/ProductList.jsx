@@ -6,7 +6,7 @@ import Newsletter from '../component/Newsletter';
 import FeaturedProduct from "../component/FeaturedProduct"
 import styled from 'styled-components';
 import { ArrowDownward, ArrowUpward, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -118,7 +118,6 @@ const ProductList = () => {
     const [filter, setFilters] = useState({})
     const [sort, setSort] = useState("Baru")
 
-
     const [product, setProduct] = useState(null)
 
     const handleFilter = (e) => {
@@ -128,9 +127,7 @@ const ProductList = () => {
         })
     }
 
-    console.log(filter)
-
-    let apiUrl = "http://localhost:5000/api/product"
+    let apiUrl = `http://localhost:5000/api/product?category=${cat}`
 
     useEffect( ()=> {
         if(product === null) {
@@ -153,7 +150,7 @@ const ProductList = () => {
         <div>
             <Navbar/>
             <FilterContainer>
-                <Filter>
+                {/* <Filter>
                     <FilterText>Urutkan :</FilterText><br/>
                     <FilterSelection onChange={e=>setSort(e.target.value)}>
                         Filter
@@ -165,13 +162,14 @@ const ProductList = () => {
                     <FilterText>Kategori :</FilterText><br/>
                     <FilterSelection name='category' onChange={handleFilter}>
                         Filter
+                        <Option></Option>
                         <Option>Wanita</Option>
                         <Option>Pria</Option>
                         <Option>Anak-anak</Option>
                     </FilterSelection>
-                </Filter> 
+                </Filter>  */}
             </FilterContainer>
-            <ProductGrid/>
+            <ProductGrid cat={cat}/>
       
             <Newsletter/>
             <Footer/>

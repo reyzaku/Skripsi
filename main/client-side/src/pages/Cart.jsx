@@ -1,4 +1,4 @@
-import { Add, Remove } from '@mui/icons-material';
+import { Add, Remove, SignalCellularNullSharp } from '@mui/icons-material';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -139,44 +139,7 @@ const Cart = (cat) => {
             setCart(data)
         })
     }, []);
-    // }
-    // const getCart = async () => {
-    //     try {
-    //         const res = await axios.get(
-    //             urlApi, {headers: { token: `Bearer ${token}` }}
-    //         )
-    //         setCart(
-    //             res.data.map((product) => product.products.map((item) => {
-    //                 return {
-    //                     productId: item.productId,
-    //                     size: item.size,
-    //                     image: item.image,
-    //                     quantity: item.quantity,
-    //                     price: item.price,
-    //                     total: item.price * item.quantity
-    //                 }
-    //             }))
-    //         )
-
-
-    //     }catch(err){}
-    // };
-    // getCart();
-
-    // for(let i = 0; i <= cart.length; i++) {
-    //     cart.map(subArray => subArray.products.map((item) => {
-    //         return (
-    //             setAmount(amount + (item.quantity * item.price))
-    //         )
-    //     }))
-    // }
-    // cart.map(subArray => subArray.products.map((item, index) => {
-    //     console.log(`id: ${index + 1} productId: ${item.productId} price: Rp. ${item.price} size: ${item.size} quantity: ${item.quantity} total: ${item.total}`)
-    // }))
-    // cart.map((item, index) =>  {
-    //     console.log(`quantity: ${item.quantity}, id: ${index + 1}`)
-    // })
-
+    
     const numb = 1000000;
     const format = numb.toString().split('').reverse().join('');
     const convert = format.match(/\d{1,3}/g);

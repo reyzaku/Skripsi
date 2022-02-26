@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import SearchIcon from '@mui/icons-material/Search';
 import { Badge } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import axios from 'axios';
 
 const Container = styled.div `
     height: 100px;
@@ -15,6 +17,10 @@ const Wrapper = styled.div `
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media (max-width: 480px) {
+        display: none;
+    }
 `
 
 const Left = styled.div `
@@ -32,6 +38,9 @@ const Right = styled.div `
 
 const Logo = styled.h1 `
     font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
 `
 
 const Input = styled.input `
@@ -65,6 +74,7 @@ const Login = styled.button`
     background-color: white;
     border: 1px solid lightgray;
     color: #0c0c0c;
+    cursor: pointer;
 `
 
 const Register = styled.button`
@@ -72,14 +82,25 @@ const Register = styled.button`
     background-color: #0c0c0c;
     border: 1px solid lightgray;
     color: white;
+    cursor: pointer;
 `
 
 const Navbar = () => {
+    const [user, setUser] = useContext(UserContext)
+    const navigate = useNavigate();
+
+    const LogoutHandle = () => {
+        setUser(null)
+        localStorage.removeItem("user")
+        navigate("/")
+    }
     return (
         <Container>
             <Wrapper>
                 <Left>
-                    <Logo>AISHA.CO</Logo>
+                    <Link to={"/"} style={{color: "black", textDecoration: "none" }}>
+                        <Logo>AISHA.CO</Logo>
+                    </Link>
                 </Left>
                 <Center>
                     <SearchInput>
@@ -87,21 +108,45 @@ const Navbar = () => {
                         <SearchIcon/>
                     </SearchInput>
                 </Center>
-                <Right>
-                    <MenuItem>
-                        <Login>Login</Login>
-                    </MenuItem>
-                    <MenuItem>
-                        <Register>Register</Register>
-                    </MenuItem>
-                    <MenuItem>
-                        <Badge badgeContent={4} color="primary">
-                            <Link to={"/cart"}>
-                                <ShoppingCartOutlinedIcon color="action" />
+                {user ? (
+                    <Right>
+                        <MenuItem>
+                            <Login onClick={LogoutHandle}>Logout</Login>
+                        </MenuItem>
+                        <MenuItem>
+                        <Link to={"/profil"}>
+                            <Register>Profile</Register>
+                        </Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Badge color="primary">
+                                <Link to={"/cart"}>
+                                    <ShoppingCartOutlinedIcon color="action" />
+                                </Link>
+                            </Badge>
+                        </MenuItem>
+                    </Right>
+                ) : (
+                    <Right>
+                        <MenuItem>
+                        <Link to={"/login"}>
+                            <Login>Login</Login>
+                        </Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link to={"/register"}>
+                                <Register>Register</Register>
                             </Link>
-                        </Badge>
-                    </MenuItem>
-                </Right>
+                        </MenuItem>
+                        <MenuItem>
+                            <Badge color="primary">
+                                <Link to={"/cart"}>
+                                    <ShoppingCartOutlinedIcon color="action" />
+                                </Link>
+                            </Badge>
+                        </MenuItem>
+                    </Right>
+                )}  
             </Wrapper>
         </Container>
     )

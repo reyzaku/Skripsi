@@ -13,10 +13,10 @@ const Container = styled.div`
     align-items: baseline;
 `
 
-const ProductGrid = (cat, sort) => {
+const ProductGrid = ({cat, sort}) => {
     const [product, setProduct] = useState([]);
     const [filterProduct, setFilterProduct] = useState([])
-    const urlApi = "http://localhost:5000/api/product"
+    const urlApi = `http://localhost:5000/api/product?category=${cat}`
     useEffect(() =>{
         const getProduct = async () => {
             try {

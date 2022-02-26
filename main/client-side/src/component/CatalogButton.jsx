@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -6,6 +7,7 @@ const Container = styled.div`
     margin: 4px;
     height: 30vh;
     position: relative;
+    cursor: pointer;
 `
 const Info = styled.div`
     position: absolute;
@@ -44,11 +46,13 @@ const Button = styled.button`
 const CatalogButton = ({item}) => {
     return (
         <Container>
-            <Image src={item.img}/>
-            <Info>
-                <Title>{item.title}</Title>
-                <Button>LIHAT KATALOG</Button>
-            </Info>
+            <Link to={`/katalog/${item.cat}`}>
+                <Image src={item.img}/>
+                <Info>
+                    <Title>{item.title}</Title>
+                    <Button>LIHAT KATALOG</Button>
+                </Info>
+            </Link>
         </Container>
     )
 }

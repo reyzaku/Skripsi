@@ -153,10 +153,11 @@ const Product = (cat) => {
                     urlApi
                 )
                 setProduct(res.data)
+                console.log(res.data)
             }catch(err){}
         };
         getProduct();
-    }, [cat]);
+    }, []);
 
     const addToCartHandle = () => {
         if(user === null) {

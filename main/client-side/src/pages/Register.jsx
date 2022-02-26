@@ -73,27 +73,27 @@ const Register = () => {
 
     const [user, setUser] = useContext(UserContext)
     const [input, setInput] = useState({
-        username: "",
-        firstname: "",
         lastname: "",
         password: "",
-        email: ""
+        email: "",
+        notelp: ""
     })
     let navigate = useNavigate();
 
     const RegisterHandle = (event) => {
         console.log(input)
-        // axios.post("http://localhost:5000/api/auth/register", {
-        //     username: input.username,
-        //     password: input.password,
-        //     email: input.email
-        // }).then(
-        //     (res) => {
-        //         navigate("/login")
-        //     }
-        // ).catch((err) => {
-        //     console.log(err);
-        // })
+        axios.post("http://localhost:5000/api/auth/register", {
+            username: input.username,
+            password: input.password,
+            email: input.email,
+            notelp: input.notelp
+        }).then(
+            (res) => {
+                navigate("/login")
+            }
+        ).catch((err) => {
+            console.log(err);
+        })
     }
 
     const ChangeHandle = (event) => {
@@ -105,20 +105,16 @@ const Register = () => {
                 setInput({ ...input, username: value })
                 break;
             }
-            case "first-name": {
-                setInput({ ...input, firstname: value })
-                break;
-            }
-            case "last-name": {
-                setInput({ ...input, lastname: value })
-                break;
-            }
             case "password": {
                 setInput({ ...input, password: value })
                 break;
             }
             case "email": {
                 setInput({ ...input, email: value })
+                break;
+            }
+            case "telp": {
+                setInput({ ...input, notelp: value })
                 break;
             }
             default: {
@@ -134,15 +130,12 @@ const Register = () => {
                 <Title>Buat Akun Baru</Title>
                 <Form>
                     <Input placeholder='Masukan Username' name="username" value={input.username} onChange={ChangeHandle}></Input>
-                    <Input placeholder='Masukan Nama Depan' name="first-name" value={input.firstname} onChange={ChangeHandle}></Input>
-                    <Input placeholder='Masukan Nama Belakang' name="last-name" value={input.lastname} onChange={ChangeHandle}></Input>
+                    <Input placeholder='Masukan no telp' name="telp" value={input.notelp} onChange={ChangeHandle}></Input>
                     <Input placeholder='Masukan E-mail' name="email" value={input.email} onChange={ChangeHandle}></Input>
                     <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={ChangeHandle}></Input>
                     <Button onClick={RegisterHandle}>BUAT AKUN</Button>
                     <Text>Atau</Text>
-                    <Link to={"/login"}>
-                        <ButtonTwo>MASUK</ButtonTwo>
-                    </Link>
+                    <ButtonTwo>MASUK</ButtonTwo>
                 </Form>
             </Wrapper>
         </Container>

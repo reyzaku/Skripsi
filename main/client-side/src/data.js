@@ -16,18 +16,21 @@ export const Categories = [
         id: 1,
         img: CategoryWanita,
         title: "PAKAIAN PEREMPUAN",
+        cat: "wanita"
     },
 
     {
         id: 1,
         img: CategoryPria,
         title: "PAKAIAN LAKI-LAKI",
+        cat: "pria"
     },
     
     {
         id: 1,
         img: CategoryAnak,
         title: "PAKAIAN ANAK-ANAK",
+        cat: "anak"
     }
 ]
 
