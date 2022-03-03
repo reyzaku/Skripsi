@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { Snap } = require("midtrans-client");
 const midtransClient = require('midtrans-client')
 
-router.post("/", verifyToken, async (req, res)=>{
+router.post("/add", verifyToken, async (req, res)=>{
     const newOrder = new Order(req.body)
 
     let snap = new midtransClient.Snap({

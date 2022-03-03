@@ -4,7 +4,7 @@ const router = require("express").Router();
 const CryptoJS = require("crypto-js");
 
 //Create Cart
-router.post("/", verifyToken, async (req, res)=>{
+router.post("/", async (req, res)=>{
     const newCart = new Cart(req.body)
     
     try{

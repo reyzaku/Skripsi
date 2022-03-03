@@ -27,6 +27,7 @@ const OrderSchema = new mongoose.Schema(
             }
         ],
         paymentToken: {type: String},
+        redirect_url: {type: String},
         address: {type: String},
         status: {type: String, default: "pending"},
         resi: {type: String}
