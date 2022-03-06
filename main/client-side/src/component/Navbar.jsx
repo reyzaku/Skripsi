@@ -6,6 +6,9 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/userRedux';
+import { cartLogout } from '../redux/cartRedux';
 
 const Container = styled.div `
     height: 100px;
@@ -86,12 +89,14 @@ const Register = styled.button`
 `
 
 const Navbar = () => {
-    const [user, setUser] = useContext(UserContext)
+    const user = useSelector((state) => state.user.currentUser);
+    const quantity = useSelector(state => state.cart.quantity)
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const LogoutHandle = () => {
-        setUser(null)
-        localStorage.removeItem("user")
+        dispatch(logout())
+        dispatch(cartLogout())
         navigate("/")
     }
     return (
@@ -121,7 +126,9 @@ const Navbar = () => {
                         <MenuItem>
                             <Badge color="primary">
                                 <Link to={"/cart"}>
-                                    <ShoppingCartOutlinedIcon color="action" />
+                                    <Badge badgeContent={quantity} color="primary">
+                                        <ShoppingCartOutlinedIcon color="action"/>
+                                    </Badge>
                                 </Link>
                             </Badge>
                         </MenuItem>

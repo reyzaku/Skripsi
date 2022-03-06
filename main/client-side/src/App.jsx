@@ -10,8 +10,10 @@ import CheckoutTwo from "./pages/CheckoutTwo";
 import CheckoutThree from "./pages/CheckoutThree";
 import MainRouter from "./MainRouter";
 import { UserProvider } from "./context/UserContext";
+import { useSelector } from "react-redux";
 
 const App = () => {
+    const user = useSelector(state =>state.user.currentUser)
   return <UserProvider>
     <MainRouter />
   </UserProvider>;

@@ -8,6 +8,10 @@ import Navbar from '../component/Navbar';
 import Newsletter from '../component/Newsletter';
 import { UserContext } from '../context/UserContext';
 import Gambar from '../img/ProductDummy1.jpeg';
+import { addProduct } from '../redux/cartRedux';
+import { useDispatch, useSelector } from 'react-redux';
+import { convertRupiah } from '../utils/convertRupiah';
+
 
 
 const Container = styled.div`
@@ -137,13 +141,13 @@ const Button = styled.button`
 
 
 const Product = (cat) => {
-
+    const user = useSelector((state) => state.user.currentUser);
     const {id} = useParams()
     let navigate = useNavigate()
-    const [user, setUser] = useContext(UserContext)
     const [product, setProduct] = useState({})
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState("")
+    const dispatch = useDispatch()
     const urlApi = `http://localhost:5000/api/product/find/${id}`
     
     useEffect(() =>{
@@ -162,34 +166,36 @@ const Product = (cat) => {
     const addToCartHandle = () => {
         if(user === null) {
             navigate("/login")
-        }
-        let userId = user.userId
-        let token = user.token
-        if(user === null) {
-            console.log("Not Authorized")
-            navigate("/")
         } else {
-            axios.put(`http://localhost:5000/api/cart/add/${userId}`,
-            
-            {
-                userId : userId,
-                products : 
-                    {
-                        productId: product._id,
-                        size: size,
-                        quantity: quantity,
-                        price: product.price,
-                        image: product.image
-                    }
-            },
-            {
-                headers: { token: `Bearer ${token}` }
-            }).then(
-                navigate("/cart")
-            ).catch((err)=>{
-                alert(err)
-            })
+            dispatch(addProduct({...product, quantity, size}))
         }
+        // let userId = user.userId
+        // let token = user.token
+        // if(user === null) {
+        //     console.log("Not Authorized")
+        //     navigate("/")
+        // } else {
+        //     axios.put(`http://localhost:5000/api/cart/add/${userId}`,
+            
+        //     {
+        //         userId : userId,
+        //         products : 
+        //             {
+        //                 productId: product._id,
+        //                 size: size,
+        //                 quantity: quantity,
+        //                 price: product.price,
+        //                 image: product.image
+        //             }
+        //     },
+        //     {
+        //         headers: { token: `Bearer ${token}` }
+        //     }).then(
+        //         navigate("/cart")
+        //     ).catch((err)=>{
+        //         alert(err)
+        //     })
+        // }
     }
 
     const quantityHandle = (type) => {
@@ -237,7 +243,7 @@ const Product = (cat) => {
                       {product.desc}
                   </ProductDesc>
                   <ProductPrice>
-                      Rp. {product.price}
+                      {product.price}
                   </ProductPrice>
                   <VariantContainer>
                       <SizeSelector>

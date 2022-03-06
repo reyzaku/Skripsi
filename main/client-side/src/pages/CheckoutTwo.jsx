@@ -1,4 +1,7 @@
-import React from 'react';
+import axios, { Axios } from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
@@ -102,6 +105,28 @@ const Button = styled.button`
 
 
 const CheckoutTwo = () => {
+    const {id} = useParams()
+    const user = useSelector(state => state.user.currentUser)
+    const [order, setOrder] = useState({})
+
+
+    useEffect(() => {
+        const getOrder = async () => {
+            try{
+                const res = await axios.get(`http://localhost:5000/api/order/find/${id}`)
+                setOrder(res.data)
+                console.log(res.data)
+            }catch(err){
+                console.log("gagal")
+            }
+        }
+        getOrder()
+    }, [])
+
+    useEffect(() => {
+
+    })
+    
     return (
         <Container>
             <Navbar/>
@@ -128,25 +153,25 @@ const CheckoutTwo = () => {
                         <Subtitle>Detail Pemesanan</Subtitle>
                         <TextContainer>
                             <Tax>Nama Penerima</Tax>
-                            <Tax>Rafi Abdilah</Tax>
+                            <Tax>{order.name}</Tax>
                         </TextContainer>
 
                         <TextContainer>
                             <Tax>No Telepon Penerima</Tax>
-                            <Tax>081292610858</Tax>
+                            <Tax>{order.phone}</Tax>
                         </TextContainer>
 
                         <TextContainer>
                             <Tax>Email Penerima</Tax>
-                            <Tax>081292610858</Tax>
+                            <Tax>{order.email}</Tax>
                         </TextContainer>
                         <Subtitle>Detail Alamat Pengiriman</Subtitle>
                         <TextContainer>
-                            <Tax>Provinsi</Tax>
-                            <Tax>JAWA BARAT</Tax>
+                            <Tax>Alamat Pengiriman</Tax>
+                            <Tax>{order.address}</Tax>
                         </TextContainer>
 
-                        <TextContainer>
+                        {/* <TextContainer>
                             <Tax>Kota</Tax>
                             <Tax>Depok</Tax>
                         </TextContainer>
@@ -154,10 +179,10 @@ const CheckoutTwo = () => {
                         <TextContainer>
                             <Tax>Kecamatan</Tax>
                             <Tax>Beji</Tax>
-                        </TextContainer>
+                        </TextContainer> */}
                         <ButtonContainer>
                             <Button type="thin">Edit Informasi Checkout</Button>
-                            <Button>Checkout</Button>
+                            <a href={order.redirect_url}><Button>Checkout</Button></a>
                         </ButtonContainer>
                     </SummaryContainer>
 

@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Navbar from '../component/Navbar';
 import { UserContext } from '../context/UserContext';
 import axios, { Axios } from 'axios'
+import { login } from '../redux/apiCalls';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Container = styled.div`
     width: 100vw;
@@ -49,6 +51,10 @@ const Button = styled.button`
         color: white;
         background: #8a2755;
     }
+    &::disabled{
+        background-color: gray;
+        cursor: not-allowed;
+    }
 `
 
 const ButtonTwo = styled.button`
@@ -70,29 +76,39 @@ const Text = styled.p`
     margin: auto;
 `
 
+const Error = styled.span`
+    color: red;
+`
+
 const Login = () => {
-    const [user, setUser] = useContext(UserContext)
     const [input, setInput] = useState({ username: "", password: "" })
+    const dispatch = useDispatch();
     let navigate = useNavigate();
+    const {isFetching, error} = useSelector((state) => state.user)
+
     const LoginHandle = (event) => {
         event.preventDefault()
-        axios.post("http://localhost:5000/api/auth/login", {
-            username: input.username,
-            password: input.password
-        }).then(
-            (res) => {
-                console.log(res)
-                var user = res.data
-                var token = res.data.accessToken
-                var currentUser = { username: user.username, userId: user._id, token }
-                setUser(currentUser)
-                localStorage.setItem("user", JSON.stringify(currentUser))
-                navigate("/")
-            }
-        ).catch((err) => {
-            alert("password atau username Salah")
-        })
+        login(dispatch, input)
     }
+    // const LoginHandle = (event) => {
+    //     event.preventDefault()
+    //     axios.post("http://localhost:5000/api/auth/login", {
+    //         username: input.username,
+    //         password: input.password
+    //     }).then(
+    //         (res) => {
+    //             console.log(res)
+    //             var user = res.data
+    //             var token = res.data.accessToken
+    //             var currentUser = { username: user.username, userId: user._id, token }
+    //             setUser(currentUser)
+    //             localStorage.setItem("user", JSON.stringify(currentUser))
+    //             navigate("/")
+    //         }
+    //     ).catch((err) => {
+    //         alert("password atau username Salah")
+    //     })
+    // }
 
 
     const changeHandle = (event) => {
@@ -119,7 +135,8 @@ const Login = () => {
                 <Form>
                     <Input placeholder='Masukan E-mail' name="username" value={input.username} onChange={changeHandle}></Input>
                     <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={changeHandle}></Input>
-                    <Button onClick={LoginHandle}>MASUK</Button>
+                    {error && <Error>Password atau email yang anda masukan salah atau tidak terdaftar!</Error>}
+                    <Button onClick={LoginHandle} disabled={isFetching}>MASUK</Button>
                     <Text>Atau</Text>
                     <ButtonTwo>BUAT AKUN BARU</ButtonTwo>
                     <Text>Lupa Password?</Text>

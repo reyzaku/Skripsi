@@ -3,8 +3,11 @@ import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
 import styled from 'styled-components'
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
+import { publicRequest, userRequest } from "../reqMethod";
+import { useSelector } from 'react-redux';
+import { convertRupiah } from '../utils/convertRupiah';
 
 const Container = styled.div``
 const Wrapper = styled.div`
@@ -101,29 +104,92 @@ const Button = styled.button`
     }
 `
 
+const InputArea = styled.textarea`
+    height: 200px;
+    width: 100% ;
+    margin-top: 10px;
+    padding: 10px;
+`
+
+const SubContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+`
+
 
 
 const CheckoutOne = () => {
-
-    const [user, setUser] = useContext(UserContext)
-    const [invoice, setInvoice] = useState({})
-    const [cust, setCust] = useState({})
-    const [address, setAddress] = useState("")
-    const {invoiceId} = useParams()
-    let token = user.token
-    const urlApi = `http://localhost:5000/api/order/invocie/find/${invoiceId}`
-
-    useEffect(() =>{
-        axios.get(urlApi, {headers: { token: `Bearer ${token}` }}).then(res => {
-            let data = res.data
-            console.log(data)
-            setInvoice(data)
-        })
-    }, []);
+    const {id} = useParams()
+    const cart = useSelector(state => state.cart)
+    const tax = (cart.total * 10)/ 100
+    const ongkir = 4500 * cart.quantity
+    const navigate = useNavigate()
+    const [address, setAddress] = useState({
+        name: "",
+        notelp: "",
+        email: "",
+        alamat: "",
+        provinsi: "",
+        kota: "",
+        kodepos: ""
+    })
 
 
     const changeHandle = (event) => {
-        
+        let value = event.target.value
+        let name = event.target.name
+        console.log(address)
+        switch(name){
+            case "name": {
+                setAddress({...address, name: value})
+                break;
+            }
+            case "notelp": {
+                setAddress({...address, notelp: value})
+                break;
+            }
+            case "email": {
+                setAddress({...address, email: value})
+                break;
+            }
+            case "alamat": {
+                setAddress({...address, alamat: value})
+                break;
+            }
+            case "provinsi": {
+                setAddress({...address, provinsi: value})
+                break;
+            }
+            case "kota": {
+                setAddress({...address, kota: value})
+                break;
+            }
+            case "kodepos": {
+                setAddress({...address, kodepos: value})
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+
+    const submitHandle = async (event) => {
+        event.preventDefault()
+        axios.put(`http://localhost:5000/api/order/add/address/${id}`, {
+            address: `${address.alamat}, ${address.provinsi}, ${address.kota}, ${address.kodepos}`,
+            name: address.name,
+            phone: address.notelp,
+            email: address.email
+        }).then(
+            axios.put(`http://localhost:5000/api/order/add/token/${id}`, {
+                gross_amount: cart.total + tax + ongkir
+            }).then(
+                // navigate(`/checkout/confirm/${id}`)
+            )
+        )
+
     }
 
     return (
@@ -151,22 +217,25 @@ const CheckoutOne = () => {
                     <Form>
                         <Subtitle>Form Checkout</Subtitle>
                         <InputTitle>Nama Penerima</InputTitle>
-                        <Input placeholder='masukan nama penerima'></Input>
+                        <Input placeholder='masukan nama penerima' name='name' onChange={changeHandle} value={address.name}></Input>
 
-                        <InputTitle>Nama Penerima</InputTitle>
-                        <Input placeholder='masukan nama penerima'></Input>
+                        <InputTitle>No Telp</InputTitle>
+                        <Input placeholder='masukan no telefon penerima' name='notelp' onChange={changeHandle} value={address.notelp}></Input>
 
-                        <InputTitle>Nama Penerima</InputTitle>
-                        <Input placeholder='masukan nama penerima'></Input>
+                        <InputTitle>Email</InputTitle>
+                        <Input placeholder='masukan Email penerima' name='email' onChange={changeHandle} value={address.email}></Input>
 
-                        <InputTitle>Nama Penerima</InputTitle>
-                        <Input placeholder='masukan nama penerima'></Input>
+                        <InputTitle>Alamat Lengkap</InputTitle>
+                        <InputArea placeholder='masukan alamat lengkap penerima' name='alamat' onChange={changeHandle} value={address.alamat}></InputArea>
 
-                        <InputTitle>Nama Penerima</InputTitle>
-                        <Input placeholder='masukan nama penerima'></Input>
+                        <InputTitle>Provinsi</InputTitle>
+                        <Input placeholder='masukan nama provinsi' name='provinsi' onChange={changeHandle} value={address.provinsi}></Input>
 
-                        <InputTitle>Nama Penerima</InputTitle>
-                        <Input placeholder='masukan nama penerima'></Input>
+                        <InputTitle>Kota</InputTitle>
+                        <Input placeholder='masukan nama kota' name='kota' onChange={changeHandle} value={address.kota}></Input>
+
+                        <InputTitle>Kode Pos</InputTitle>
+                        <Input placeholder='masukan nama kode pos' name='kodepos' onChange={changeHandle} value={address.kodepos}></Input>
                         <ButtonContainer>
                             <Button type="thin">Tambah Barang Lagi</Button>
                             <Button>Checkout</Button>
@@ -175,18 +244,26 @@ const CheckoutOne = () => {
 
                     <SummaryContainer>
                         <Subtitle>Estimasi Harga</Subtitle>
-                        <TextContainer>
-                            <Subtotal>Sub Total</Subtotal>
-                            <Subtotal>Rp. 340.000</Subtotal>
-                        </TextContainer>
-                        <TextContainer>
-                            <Tax>Tax</Tax>
-                            <Tax>Rp. 34.000</Tax>
-                        </TextContainer>
-                        <TextContainer>
-                            <Estimated>Total</Estimated>
-                            <Estimated>Rp. 364.000</Estimated>
-                        </TextContainer>
+                        <SubContainer>
+                            <Subtotal>Sub Total Barang</Subtotal>
+                            <Subtotal>{convertRupiah(cart.total)}</Subtotal>
+                        </SubContainer>
+                        <SubContainer>
+                            <Tax>Ongkos Kirim</Tax>
+                            <Tax>{convertRupiah(ongkir)}</Tax>
+                        </SubContainer>
+                        <SubContainer>
+                            <Tax>Pajak</Tax>
+                            <Tax>{convertRupiah(tax)}</Tax>
+                        </SubContainer>
+                        <SubContainer>
+                            <Estimated>Total Harga</Estimated>
+                            <Estimated>{convertRupiah(((cart.total * 10)/ 100) + cart.total)}</Estimated>
+                        </SubContainer>
+                        <Link to={"/katalog"}>
+                            <Button>Tambah Product Lagi</Button>
+                        </Link>
+                        <Button onClick={submitHandle}>Checkout</Button>
                     </SummaryContainer>
                 </CheckoutContainer>
             </Wrapper>

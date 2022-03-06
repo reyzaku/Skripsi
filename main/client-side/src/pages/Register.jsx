@@ -81,6 +81,7 @@ const Register = () => {
     let navigate = useNavigate();
 
     const RegisterHandle = (event) => {
+        event.preventDefault()
         console.log(input)
         axios.post("http://localhost:5000/api/auth/register", {
             username: input.username,
