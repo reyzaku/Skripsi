@@ -4,7 +4,7 @@ const router = require("express").Router();
 const midtransClient = require('midtrans-client');
 
 //Create order + Req Midtrans Token
-router.post("/add", verifyToken, async (req, res)=>{
+router.post("/add", async (req, res)=>{
     const newOrder = new Order(req.body)
 
     try{
@@ -16,26 +16,34 @@ router.post("/add", verifyToken, async (req, res)=>{
     }
 })
 
-router.put("/add/address/:invoiceId", verifyToken, async (req, res) =>{
-    let address = { "address" : req.body.address}
-    let customer = { "name" : req.body.customerDetail.name, "phone": req.body.customerDetail.phone, "email": req.body.customerDetail.email,}
-    const addAddress = await Cart.findByIdAndUpdate(
+router.put("/add/address/:id", async (req, res) =>{
+    Order.findOneAndUpdate(
+        {invoiceId: req.params.id},
         {
-            userId: req.body.invoiceId
+            $set: {
+                address: req.body.address,
+                name : req.body.name,
+                email : req.body.email,
+                phone : req.body.phone
+            }
         },
-        {
-            $push: {address: address, customerDetail: [customer]}
+        {new: true},
+        (err, doc) => {
+            if(err) {
+                res.status(200).json(err)
+            }
+            res.status(500).json(doc)
         }
     )
 
-    try{
-        res.status(200).json(addAddress)
-    }catch(err){
-        res.status(500).json(err)
-    }
+    // try{
+    //     res.status(200).json(addAddress)
+    // }catch(err){
+    //     res.status(500).json(err)
+    // }
 })
 
-router.put("/add/token/:id", verifyToken, (req, res) =>{
+router.put("/add/token/:id", (req, res) =>{
     let payload = {}
     let snap = new midtransClient.Snap({
         isProduction: false,
@@ -43,9 +51,11 @@ router.put("/add/token/:id", verifyToken, (req, res) =>{
         clientKey : process.env.MIDTRANS_CLIENT_KEY
     })
 
+    console.log(req.params.id)
+
     const parameter = {
         "transaction_details": {
-            "order_id": req.body.invoiceId,
+            "order_id": req.params.id,
             "gross_amount": req.body.gross_amount
         }
     }
@@ -56,31 +66,54 @@ router.put("/add/token/:id", verifyToken, (req, res) =>{
         payload.token = transactionToken
         payload.url = redirectUrl
         
-        try{
-            const addToken = await Order.findByIdAndUpdate(
-                req.params.id,
-                {
-                    $set: {gross_amount: req.body.gross_amount, paymentToken: payload.token, redirect_url: payload.url}
-                },
-                { new: true }
-            )
-            res.status(200).json(addToken)
-        }catch(err){
-            res.status(500).json(err)
-        }
+        Order.findOneAndUpdate(
+            {invoiceId: req.params.id},
+            {
+                $set: {paymentToken: payload.token, redirect_url: payload.url}
+            },
+            { new: true },
+            (err, doc) => {
+                if(err) {
+                    res.status(200).json(err)
+                }
+                res.status(500).json(doc)
+            }
+        )
+        // try{
+        //     res.status(200).json(Order)
+        // }catch(err){
+        //     res.status(500).json(err)
+        // }
     })
     
 })
 
-//Find Invoice 
-router.get("/find/:invoiceId", verifyToken, async (req, res) => {
-    try {
-        const invoice = await Order.find({invoiceId: req.params.invoiceId})
-        res.status(200).json(invoice)
+router.get("/find/:id", async (req, res)=>{
+    try{
+        const order = await Order.findOne({invoiceId: req.params.id})
+        res.status(200).json(order);
     }catch(err){
         res.status(500).json(err)
     }
-})
+});
+//Find Invoice 
+// router.get("/find/:id", async (req, res) => {
+
+//     Order.find({invoiceId: req.params.id}, (error, data) => {
+//         if(error){
+//             res.status(500).json(error)
+//         }else {
+//             res.status(200).json(data)
+//         }
+//     })
+
+//     // try {
+//     //     const invoice = await Order.find({invoiceId: req.params.invoiceId})
+//     //     res.status(200).json(invoice)
+//     // }catch(err){
+//     //     res.status(500).json(err)
+//     // }
+// })
 
 // Put (Update Account Information)
 router.put("/:id", verifyTokenAndAdmin, async (req, res)=>{
@@ -109,19 +142,19 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res)=>{
     }
 });
 
-//Get (Querying User Account (admin only))
-router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res)=>{
-    try{
-        const order = await Order.find({userId: req.params.userId})
-        res.status(200).json(order);
+// //Get (Querying User Account (admin only))
+// router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res)=>{
+//     try{
+//         const order = await Order.find({userId: req.params.userId})
+//         res.status(200).json(order);
 
-    }catch(err){
-        res.status(500).json(err)
-    }
-});
+//     }catch(err){
+//         res.status(500).json(err)
+//     }
+// });
 
 //Get (Querying All User Account (admin only))
-router.get("/", verifyTokenAndAdmin, async (req, res)=>{
+router.get("/", async (req, res)=>{
     try{
         const order = await Order.find()
         res.status(200).json(order)

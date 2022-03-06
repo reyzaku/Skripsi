@@ -19,13 +19,9 @@ const OrderSchema = new mongoose.Schema(
             },
         ],
         gross_amount: {type:Number, required: true},
-        customerDetail: [
-            {
-                name: {type: String},
-                email : {type: String},
-                phone : {type: String}
-            }
-        ],
+        name: {type: String},
+        email : {type: String},
+        phone : {type: String},
         paymentToken: {type: String},
         redirect_url: {type: String},
         address: {type: String},
