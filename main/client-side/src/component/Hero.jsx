@@ -7,6 +7,11 @@ const Container = styled.div`
     height: 60vh;
     text-align: center;
     background-image: url(${hero});
+
+    @media (max-width: 480px) {
+        margin: auto;
+        height: 100vh;
+    }
 `
 
 const Wrapper = styled.div`

@@ -6,6 +6,10 @@ import ProductCard from './ProductCard';
 
 const Wrapper = styled.div`
     margin: 100px 50px;
+
+    @media (max-width: 480px) {
+        margin: 20px auto;
+    }
 `
 
 const TitleSection = styled.div`

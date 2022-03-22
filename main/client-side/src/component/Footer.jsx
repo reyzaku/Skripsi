@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     background-color: black;
+
+    @media (max-width: 480px) {
+        width: 100%;
+    }
 `
 
 const Container = styled.div`
@@ -11,6 +15,11 @@ const Container = styled.div`
     height: 40vh;
     background-color: black;
     padding: 50px 70px 0px 70px;
+
+    @media (max-width: 480px) {
+        flex-direction: column;
+        height: 50vh;
+    }
 `
 const Left = styled.div`
     flex: 1;

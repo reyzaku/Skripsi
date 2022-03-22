@@ -9,9 +9,9 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/userRedux';
 import { cartLogout } from '../redux/cartRedux';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Container = styled.div `
-    height: 100px;
     background-color: white;
 `
 
@@ -44,6 +44,10 @@ const Logo = styled.h1 `
     cursor: pointer;
     text-decoration: none;
     color: black;
+
+    @media (max-width: 480px) {
+        font-size: 1em;
+    }
 `
 
 const Input = styled.input `
@@ -84,8 +88,63 @@ const Register = styled.button`
     padding: 10px 30px;
     background-color: #0c0c0c;
     border: 1px solid lightgray;
-    color: white;
+    color: #ffffff;
     cursor: pointer;
+`
+
+const MobileWrapper = styled.div`
+    display: none;
+
+    @media (max-width: 480px) {
+        display: block;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        background-color: white;
+        z-index: 100;
+        box-shadow: 0px 5px 20px rgb(0, 0, 0, 0.3);
+    }
+`
+
+const MobileNav = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 10px;
+    padding: 20px 0;
+`
+
+const MobileLogo = styled.p`
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1em;
+`
+
+const Hamburger = styled.button`
+    background-color: white;
+    border: none;
+`
+
+const NavLink = styled.a`
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    padding: 10px 0px;
+    text-align: center;
+`
+
+
+const NavLinkDiv = styled.div`
+    text-decoration: none;
+    width: 100%;
+    padding: 10px 0px;
+    text-align: center;
+    border-bottom: solid 1px lightgray;
+
+`
+
+const NavWrapper = styled.div`
+    display: ${props => props.active === "true" ? "flex" : "none"};
+    flex-direction: column;
 `
 
 const Navbar = () => {
@@ -93,12 +152,22 @@ const Navbar = () => {
     const quantity = useSelector(state => state.cart.quantity)
     const navigate = useNavigate();
     const dispatch = useDispatch()
+    const [mobile, setMobile] = useState("false")
 
     const LogoutHandle = () => {
         dispatch(logout())
         dispatch(cartLogout())
         navigate("/")
     }
+
+    const expandHandle = () => {
+        if(mobile === "false") {
+            setMobile("true")
+        } else {
+            setMobile("false")
+        }
+    }
+
     return (
         <Container>
             <Wrapper>
@@ -155,6 +224,57 @@ const Navbar = () => {
                     </Right>
                 )}  
             </Wrapper>
+
+            <MobileWrapper>
+                <MobileNav active={mobile}>
+                    <MobileLogo>AISHA.CO</MobileLogo>
+                    <Hamburger onClick={expandHandle}>
+                        <MenuIcon/>
+                    </Hamburger>
+                </MobileNav>
+                <NavWrapper active={mobile}>
+                    <NavLinkDiv>
+                        <Link to={"/"}>
+                            <NavLink>Home</NavLink>
+                        </Link>
+                    </NavLinkDiv>
+                    <NavLinkDiv>
+                        <Link to={"/cart"}>
+                            <NavLink>Keranjang ({quantity})</NavLink>
+                        </Link>
+                    </NavLinkDiv>
+                    <NavLinkDiv>
+                        <Link to={"/katalog/wanita"}>
+                            <NavLink>Katalog</NavLink>
+                        </Link>
+                    </NavLinkDiv>
+                    {user ?
+                        <div>
+                            <NavLinkDiv>
+                                <Link to={"/profil"}>
+                                    <NavLink>Profil</NavLink>
+                                </Link>
+                            </NavLinkDiv>
+                            <NavLinkDiv>
+                                <NavLink onClick={LogoutHandle}>Logout</NavLink>
+                            </NavLinkDiv>
+                        </div>
+                    :
+                        <div>
+                            <NavLinkDiv>
+                                <Link to={"/login"}>
+                                    <NavLink>Login</NavLink>
+                                </Link>
+                            </NavLinkDiv>
+                            <NavLinkDiv>
+                                <Link to={"/register"}>
+                                    <NavLink>Register</NavLink>
+                                </Link>
+                            </NavLinkDiv>
+                        </div>
+                    }
+                </NavWrapper>
+            </MobileWrapper>
         </Container>
     )
 }

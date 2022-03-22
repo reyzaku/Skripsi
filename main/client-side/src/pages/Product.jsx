@@ -15,36 +15,54 @@ import { convertRupiah } from '../utils/convertRupiah';
 
 
 const Container = styled.div`
-
+    width: 100%;
 `
 
 const Wrapper = styled.div`
     margin: 50px 70px;
     display: flex;
+    flex-wrap: wrap;
+
+    @media (max-width: 480px) {
+        margin: 10px 10px;
+        flex-direction: column;
+    }
 `
 
 const ImageContainer = styled.div`
     flex: 1;
     margin-right: 50px;
+
+    @media (max-width: 480px) {
+        width: 100%;
+        margin: auto;
+    }
 `
 
 const Image = styled.img`
     width: 75%;
-`
 
-const ImageSlider = styled.div`
-
+    @media (max-width: 480px) {
+        width: 100%;
+    }
 `
 
 const InfoContainer = styled.div`
     flex: 1;
 
+    @media (max-width: 480px) {
+        flex: 0;
+    }
 `
 
 const ProductTitle = styled.h2`
     margin-bottom: 20px;
     font-size: 50px;
     font-weight: 200;
+
+    @media (max-width: 480px) {
+        font-size: 2em;
+    }
 `
 
 const ProductDesc = styled.p`
@@ -137,6 +155,10 @@ const Button = styled.button`
         transform: scale(1.05);
         background: #8a2755;
     }
+
+    @media (max-width: 480px) {
+        width: 100%;
+    }
 `
 
 
@@ -228,12 +250,10 @@ const Product = (cat) => {
 
     return (
       <Container>
-          {console.log(product)}
           <Navbar/>
           <Wrapper>
               <ImageContainer>
                   <Image src={product.image}/>
-                  <ImageSlider/>
               </ImageContainer>
               <InfoContainer>
                   <ProductTitle>

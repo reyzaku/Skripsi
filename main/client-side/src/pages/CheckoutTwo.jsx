@@ -1,14 +1,18 @@
 import axios, { Axios } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
+import { cartLogout } from '../redux/cartRedux';
 
 const Container = styled.div``
 const Wrapper = styled.div`
     margin: 50px 70px;
+    @media (max-width: 480px) {
+        margin: 10px auto;
+    }
 `
 const CrumbContainer = styled.div`
     display: flex;
@@ -16,6 +20,10 @@ const CrumbContainer = styled.div`
     justify-content: center;
     border-bottom: solid 0.5px lightgray;
     margin-bottom: 50px;
+
+    @media (max-width: 480px) {
+        display: none;
+    }
 `
 const Crumb = styled.div`
     text-align: center;
@@ -42,6 +50,9 @@ const CheckoutContainer = styled.div`
     display: flex;
     width: 100%;
     justify-content: space-between;
+    @media (max-width: 480px) {
+        flex-direction: column-reverse;
+    }
 `
 const Form = styled.form`
     flex: 2;
@@ -62,6 +73,9 @@ const Input = styled.input`
 const SummaryContainer = styled.div`
     flex: 1;
     margin-left: 20px;
+    @media (max-width: 480px) {
+        margin: 10px 10px;
+    }
 `
 const TextContainer = styled.div`
     display: flex;
@@ -106,6 +120,8 @@ const Button = styled.button`
 
 const CheckoutTwo = () => {
     const {id} = useParams()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const user = useSelector(state => state.user.currentUser)
     const [order, setOrder] = useState({})
 
@@ -123,9 +139,13 @@ const CheckoutTwo = () => {
         getOrder()
     }, [])
 
-    useEffect(() => {
+    const startPayment = () => {
+        dispatch(cartLogout());
+        window.location.href = order.redirect_url
+        // navigate(order.redirect_url)
+    }
 
-    })
+
     
     return (
         <Container>
@@ -182,7 +202,7 @@ const CheckoutTwo = () => {
                         </TextContainer> */}
                         <ButtonContainer>
                             <Button type="thin">Edit Informasi Checkout</Button>
-                            <a href={order.redirect_url}><Button>Checkout</Button></a>
+                            <Button onClick={startPayment}>Checkout</Button>
                         </ButtonContainer>
                     </SummaryContainer>
 

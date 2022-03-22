@@ -1,14 +1,20 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
 import { UserContext } from '../context/UserContext';
 import ProfileImage from "../img/Profile.jpg";
+import OrderList from "../component/OrderList"
 
 const Container = styled.div``
 const Wrapper = styled.div`
     margin: 50px 70px;
+
+    @media (max-width: 480px) {
+        margin: 50px auto;
+    }
 `
 const ProfileCard = styled.div`
     text-align: center;
@@ -43,6 +49,10 @@ const Button = styled.button`
         color: white;
         background: #8a2755;
     }
+
+    @media (max-width: 480px) {
+        width: 200px;
+    }
 `
 const ProfileNav = styled.div`
     display: flex;
@@ -56,6 +66,10 @@ const NavCard = styled.div`
     width: 20vw;
     border: solid 0.5px lightgray;
     text-align: center;
+
+    @media (max-width: 480px) {
+        width: 100vw;
+    }
 `
 
 const NavTitle = styled.h3`
@@ -81,51 +95,22 @@ const NavButton = styled.button`
     }
 `
 
+const Title = styled.h2`
+    font-size: 32px;
+    font-weight: 300;
+    margin: 20px 70px;
+`
+
 
 const Profile = () => {
-    const [user, setUser] = useContext(UserContext)
-    const [profile, setProfile] = useState({})
-    const userId = user.userId
-    const token = user.token
-    const apiUrl = `http://localhost:5000/api/user/find/${userId}`
-
-    useEffect(() =>{
-        const getProfile = async () => {
-            try {
-                const res = await axios.get(
-                    apiUrl, { headers: { token: `Bearer ${token}` }}
-                )
-                setProfile(res.data.others)
-                console.log(res.data)
-            }catch(err){}
-        };
-        getProfile();
-    }, []);
+    const user = useSelector(state => state.user.currentUser)
 
     return (
         <Container>
             <Navbar/>
             <Wrapper>
-                <ProfileCard>
-                    <Image src={ProfileImage}/>
-                    <Name>{profile.username}</Name>
-                    <Email>{profile.email}</Email>
-                    <Button>Edit Profile</Button>
-                </ProfileCard>
-
-                <ProfileNav>
-                    <NavCard>
-                        <NavTitle>Transaksi Saya</NavTitle>
-                        <Count>10</Count>
-                        <NavButton nav>Lihat Daftar Transaksi</NavButton>
-                    </NavCard>
-
-                    <NavCard>
-                        <NavTitle>Alamat Saya</NavTitle>
-                        <Count>10</Count>
-                        <NavButton nav>Lihat Daftar Alamat</NavButton>
-                    </NavCard>
-                </ProfileNav>
+                <Title>Pesanan Saya</Title>
+                <OrderList/>
             </Wrapper>
             <Footer/>
         </Container>

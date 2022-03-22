@@ -16,6 +16,10 @@ const Container = styled.div`
 const Wrapper = styled.div`
     width: 40%;
     padding: 20px;
+
+    @media (max-width: 480px) {
+        width: 100%;
+    }
 `
 
 const Form = styled.form`
@@ -97,6 +101,10 @@ const Register = () => {
         })
     }
 
+    const LoginHandle = () => {
+        navigate("/login")
+    }
+
     const ChangeHandle = (event) => {
         let value = event.target.value
         let name = event.target.name
@@ -136,7 +144,7 @@ const Register = () => {
                     <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={ChangeHandle}></Input>
                     <Button onClick={RegisterHandle}>BUAT AKUN</Button>
                     <Text>Atau</Text>
-                    <ButtonTwo>MASUK</ButtonTwo>
+                    <ButtonTwo onClick={LoginHandle}>MASUK</ButtonTwo>
                 </Form>
             </Wrapper>
         </Container>

@@ -12,6 +12,10 @@ const Container = styled.div`
     justify-content: center;
     margin: 0px 70px 100px 70px;
     flex-direction: column;
+
+    @media (max-width: 480px) {
+        margin: auto;
+    }
 `
 
 const Title = styled.h2``
@@ -25,6 +29,11 @@ const InputContainer = styled.div`
     height: 50px;
     justify-content: space-between;
     border: 1px solid lightgray;
+
+    @media (max-width: 480px) {
+        width: 80%;
+        margin: 10px auto;
+    }
 `
 const Input = styled.input`
     border: none;

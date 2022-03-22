@@ -19,6 +19,10 @@ const Container = styled.div`
 const Wrapper = styled.div`
     width: 40%;
     padding: 20px;
+
+    @media (max-width: 480px) {
+        width: 100%;
+    }
 `
 
 const Form = styled.form`
@@ -84,11 +88,16 @@ const Login = () => {
     const [input, setInput] = useState({ username: "", password: "" })
     const dispatch = useDispatch();
     let navigate = useNavigate();
-    const {isFetching, error} = useSelector((state) => state.user)
+    const isFetching = useSelector((state) => state.user.isFetching)
+    const isError = useSelector((state)=> state.user.error)
 
     const LoginHandle = (event) => {
         event.preventDefault()
         login(dispatch, input)
+    }
+
+    const RegisterHandle = () => {
+        navigate("/register")
     }
     // const LoginHandle = (event) => {
     //     event.preventDefault()
@@ -135,10 +144,10 @@ const Login = () => {
                 <Form>
                     <Input placeholder='Masukan E-mail' name="username" value={input.username} onChange={changeHandle}></Input>
                     <Input placeholder='Masukan Password' type="password" name="password" value={input.password} onChange={changeHandle}></Input>
-                    {error && <Error>Password atau email yang anda masukan salah atau tidak terdaftar!</Error>}
+                    {isError && <Error>Password atau email yang anda masukan salah atau tidak terdaftar!</Error>}
                     <Button onClick={LoginHandle} disabled={isFetching}>MASUK</Button>
                     <Text>Atau</Text>
-                    <ButtonTwo>BUAT AKUN BARU</ButtonTwo>
+                    <ButtonTwo onClick={RegisterHandle}>BUAT AKUN BARU</ButtonTwo>
                     <Text>Lupa Password?</Text>
                 </Form>
             </Wrapper>

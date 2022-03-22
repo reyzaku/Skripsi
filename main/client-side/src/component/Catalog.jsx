@@ -8,6 +8,12 @@ const Container = styled.div `
     padding: 20px;
     justify-content: space-between;
     margin: auto 50px ;
+
+    @media (max-width: 480px) {
+        margin: auto;
+        padding: 20px 0px;
+        flex-direction: column;
+    }
 `
 
 const Catalog = () => {

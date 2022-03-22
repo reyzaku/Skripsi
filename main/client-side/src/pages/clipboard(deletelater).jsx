@@ -8,3 +8,5 @@ data.map((product) => product.products.map((item) => (
         total: item.price * item.quantity
     }
 ))
+
+npm i @rpldy/uploady

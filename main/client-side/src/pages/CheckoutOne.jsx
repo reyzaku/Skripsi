@@ -12,6 +12,9 @@ import { convertRupiah } from '../utils/convertRupiah';
 const Container = styled.div``
 const Wrapper = styled.div`
     margin: 50px 70px;
+    @media (max-width: 480px) {
+        margin: 10px auto;
+    }
 `
 const CrumbContainer = styled.div`
     display: flex;
@@ -19,6 +22,10 @@ const CrumbContainer = styled.div`
     justify-content: center;
     border-bottom: solid 0.5px lightgray;
     margin-bottom: 50px;
+
+    @media (max-width: 480px) {
+        display: none;
+    }
 `
 const Crumb = styled.div`
     text-align: center;
@@ -45,10 +52,17 @@ const CheckoutContainer = styled.div`
     display: flex;
     width: 100%;
     justify-content: space-between;
+    @media (max-width: 480px) {
+        flex-direction: column;
+    }
 `
 const Form = styled.form`
     flex: 2;
     margin-right: 100px;
+
+    @media (max-width: 480px) {
+        margin: 10px 10px;
+    }
 `
 
 const InputTitle = styled.p`
@@ -60,11 +74,18 @@ const Input = styled.input`
     margin: 10px 0px;
     height: 40px;
     padding-left: 10px;
+
+    @media (max-width: 480px) {
+        padding: 0;
+    }
 `
 
 const SummaryContainer = styled.div`
     flex: 1;
     margin-left: 20px;
+    @media (max-width: 480px) {
+        margin: 0px 10px;
+    }
 `
 const TextContainer = styled.div`
     display: flex;
@@ -109,6 +130,10 @@ const InputArea = styled.textarea`
     width: 100% ;
     margin-top: 10px;
     padding: 10px;
+
+    @media (max-width: 480px) {
+        padding: 0;
+    }
 `
 
 const SubContainer = styled.div`
@@ -186,7 +211,7 @@ const CheckoutOne = () => {
             axios.put(`http://localhost:5000/api/order/add/token/${id}`, {
                 gross_amount: cart.total + tax + ongkir
             }).then(
-                // navigate(`/checkout/confirm/${id}`)
+                navigate(`/checkout/confirm/${id}`)
             )
         )
 
@@ -236,10 +261,10 @@ const CheckoutOne = () => {
 
                         <InputTitle>Kode Pos</InputTitle>
                         <Input placeholder='masukan nama kode pos' name='kodepos' onChange={changeHandle} value={address.kodepos}></Input>
-                        <ButtonContainer>
+                        {/* <ButtonContainer>
                             <Button type="thin">Tambah Barang Lagi</Button>
                             <Button>Checkout</Button>
-                        </ButtonContainer>
+                        </ButtonContainer> */}
                     </Form>
 
                     <SummaryContainer>

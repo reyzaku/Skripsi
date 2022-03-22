@@ -11,6 +11,13 @@ const Container = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: baseline;
+
+    @media (max-width: 480px) {
+        width: 100%;
+        margin: 10px auto;
+        flex-direction: column;
+    }
+    
 `
 
 const ProductGrid = ({cat, sort}) => {

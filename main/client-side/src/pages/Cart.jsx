@@ -6,13 +6,9 @@ import styled from 'styled-components';
 import CartCard from '../component/CartCard';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
-import { OrderContext, OrderProvider } from '../context/OrderContext';
-import { UserContext } from '../context/UserContext';
-import Product1 from "../img/ProductDummy1.jpeg"
-import Product2 from "../img/ProductDummy2.jpeg"
 import { useSelector } from 'react-redux';
 import { convertRupiah } from '../utils/convertRupiah';
-import { userRequest } from '../reqMethod';
+
 
 const Container = styled.div`
 
@@ -32,6 +28,11 @@ const Wrapper = styled.div`
     display: flex;
     margin: 50px 70px;
     justify-content: space-between;
+
+    @media (max-width: 480px) {
+        flex-direction: column;
+        margin: 50px 10px;
+    }
 
 `
 const ProductContainer = styled.div`

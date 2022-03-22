@@ -6,6 +6,10 @@ import Navbar from '../component/Navbar';
 const Container = styled.div``
 const Wrapper = styled.div`
     margin: 50px 70px;
+
+    @media (max-width: 480px) {
+        margin: 50px 10px;
+    }
 `
 const CrumbContainer = styled.div`
     display: flex;
@@ -13,6 +17,10 @@ const CrumbContainer = styled.div`
     justify-content: center;
     border-bottom: solid 0.5px lightgray;
     margin-bottom: 50px;
+
+    @media (max-width: 480px) {
+        display: none;
+    }
 `
 const Crumb = styled.div`
     text-align: center;
@@ -42,6 +50,11 @@ const CheckoutContainer = styled.div`
     justify-content: space-between;
     border: solid 0.5px lightgray;
     padding: 20px;
+    
+    @media (max-width: 480px) {
+        margin: 50px auto;
+        padding: 2em;
+    }
 `
 const Subtitle = styled.h3`
     text-align: ${props => props.type === "thinsmall" ? "left" : "center"};
@@ -73,11 +86,15 @@ const Button = styled.button`
         color: white;
         background: #8a2755;
     }
+    
 `
 
 const ButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    @media (max-width: 480px) {
+        flex-direction: column;
+    }
 `
 
 const CheckoutThree = () => {
@@ -104,38 +121,7 @@ const CheckoutThree = () => {
 
                 <CheckoutContainer>
                     <Subtitle bold="true">Pemesanan Berhasil</Subtitle>
-                    <Subtitle>Terima kasih :)</Subtitle>
-
-                    <Subtitle type="thinsmall" bold="true">Detail Pemesanan</Subtitle>
-                        <TextContainer>
-                            <Tax>Nama Penerima</Tax>
-                            <Tax>Rafi Abdilah</Tax>
-                        </TextContainer>
-
-                        <TextContainer>
-                            <Tax>No Telepon Penerima</Tax>
-                            <Tax>081292610858</Tax>
-                        </TextContainer>
-
-                        <TextContainer>
-                            <Tax>Email Penerima</Tax>
-                            <Tax>081292610858</Tax>
-                        </TextContainer>
-                        <Subtitle type="thinsmall" bold="true">Detail Alamat Pengiriman</Subtitle>
-                        <TextContainer>
-                            <Tax>Provinsi</Tax>
-                            <Tax>JAWA BARAT</Tax>
-                        </TextContainer>
-
-                        <TextContainer>
-                            <Tax>Kota</Tax>
-                            <Tax>Depok</Tax>
-                        </TextContainer>
-
-                        <TextContainer>
-                            <Tax>Kecamatan</Tax>
-                            <Tax>Beji</Tax>
-                        </TextContainer>
+                    <Subtitle>Terima kasih!</Subtitle>
                         
                         <ButtonContainer>
                             <Button type="thin">Kembali ke halaman utama</Button>

@@ -4,12 +4,14 @@ import Homepage from './pages/Homepage'
 import Profile from './pages/Profile'
 import CheckoutOne from './pages/CheckoutOne'
 import CheckoutTwo from './pages/CheckoutTwo'
+import CheckoutThree from './pages/CheckoutThree'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import { useSelector } from "react-redux";
 import Product from './pages/Product'
 import ProductList from './pages/ProductList'
 import Cart from './pages/Cart'
+import Invoice from './pages/Invoice'
 
 
 
@@ -32,9 +34,11 @@ const MainRouter = () => {
                     {/* <LoginRoute exact path="/register" element={<Register />} />
                     <LoginRoute exact path="/login" element={<Login />} /> */}
                     <Route exact path='/profil' element={user ? <Profile /> : <Navigate to="/login" />} />
-                    {/* <AuthRoute exact path="/profil" element={<Profile />} /> */}
+                    {/* <AuthRoute exact  path="/profil" element={<Profile />} /> */}
                     <Route exact path='/checkout/form/:id' element={<CheckoutOne />} />
                     <Route exact path='/checkout/confirm/:id' element={<CheckoutTwo />} />
+                    <Route exact path='/checkout/complete' element={<CheckoutThree />} />
+                    <Route exact path='/order/:id' element={<Invoice />} />
                 </Routes>
             </Router>
         </div>
