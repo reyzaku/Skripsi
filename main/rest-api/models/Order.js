@@ -4,20 +4,7 @@ const OrderSchema = new mongoose.Schema(
     {
         userId:{type: String, required:true},
         invoiceId: {type: String, required:true, unique:true},
-        products: [
-            {
-                productId: {
-                    type:String
-                },
-                quantity: {
-                    type: Number,
-                    default: 1,
-                },
-                size : {
-                    type: String
-                }
-            },
-        ],
+        products: [],
         gross_amount: {type:Number, required: true},
         name: {type: String},
         email : {type: String},

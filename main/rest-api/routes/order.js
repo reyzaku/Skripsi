@@ -96,6 +96,23 @@ router.get("/find/:id", async (req, res)=>{
         res.status(500).json(err)
     }
 });
+
+router.get("/find", async (req, res) => {
+    const qUser = req.query.userId
+    const qInvoice = req.query.invoiceId
+
+    try {
+        if(qUser){
+            const order = await Order.find({userId: qUser})
+            res.status(200).json(order)
+        }else if(qInvoice){
+            const order = await Order.findOne({invoiceId: qInvoice})
+            res.status(200).json(order)
+        }
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
 //Find Invoice 
 // router.get("/find/:id", async (req, res) => {
 
