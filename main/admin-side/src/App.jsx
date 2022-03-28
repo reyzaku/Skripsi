@@ -1,20 +1,20 @@
 import Login from "./Pages/Auth/Login";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from "./Component/Header";
-import Sidebar from "./Component/SideBar";
-import DetailedHeader from "./Component/DetailedHeader";
-import Tables from "./Component/Tables";
+import UserForm from "./Pages/User/UserForm";
+import NavigationBar from "./Component/NavigationBar";
 
 const App = () => {
-    return(
+    return (
         <div>
-            <Sidebar />
-            <Header />
+            <NavigationBar />
+            {/* <Sidebar /> */}
+            <UserForm />
+            {/* <Header />
             <DetailedHeader />
-            <Tables />    
+            <Tables /> */}
         </div>
-    ) 
-        
+    )
+
 };
 
 export default App;

@@ -2,12 +2,8 @@ import React from 'react'
 import { Accordion, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import styled from 'styled-components'
 
-const GlobalContainer = styled.div`
-    padding: 50px 70px;
-`
 
-
-const Sidebar = () => {
+const NavigationBar = () => {
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
@@ -35,4 +31,4 @@ const Sidebar = () => {
     )
 }
 
-export default Sidebar
+export default NavigationBar
