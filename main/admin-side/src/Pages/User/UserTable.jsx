@@ -6,7 +6,7 @@ import Header from "../../Component/Header";
 import UserData from '../../User_data.json'
 import ReactPaginate from "react-paginate";
 import './pagination.css'
-import { Button, Pagination } from 'react-bootstrap';
+import { Breadcrumb, Button, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const UserTable = () => {
@@ -46,8 +46,12 @@ const UserTable = () => {
 
     return (
         <div>
-            <NavigationBar />
             <GlobalContainer>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                    <Breadcrumb.Item href="#">User</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Add User</Breadcrumb.Item>
+                </Breadcrumb>
                 <Title>Daftar User</Title>
                 <Header />
                 <Table striped bordered hover>
