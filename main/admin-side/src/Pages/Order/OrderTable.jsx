@@ -7,7 +7,7 @@ import { GlobalContainer, Title } from '../../PreStyled'
 import OrderData from '../../Order_data.json'
 
 const OrderTable = () => {
-    const [data, setData] = useState(OrderData.slice(0, 200).sort)
+    const [data, setData] = useState(OrderData.slice(0, 200))
     const [pageNumber, setPageNumber] = useState(0)
 
     const navigate = () => {

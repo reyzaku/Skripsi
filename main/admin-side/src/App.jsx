@@ -15,19 +15,12 @@ import ProductEdit from "./Pages/Product/ProductEdit";
 import OrderTable from "./Pages/Order/OrderTable";
 import ResiInput from "./Pages/Order/ResiInput";
 import OrderDetail from "./Pages/Order/OrderDetail";
+import MainRouter from "./MainRouter";
 
 const App = () => {
     return (
         <div>
-            <NavigationBar />
-            {/* <Sidebar /> */}
-            {/* <UserEdit /> */}
-            {/* <OrderTable /> */}
-            {/* <ResiInput /> */}
-            <OrderDetail />
-            {/* <Header />
-            <DetailedHeader />
-            <Tables /> */}
+            <MainRouter />
         </div>
     )
 
