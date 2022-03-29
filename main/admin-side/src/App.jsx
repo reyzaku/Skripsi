@@ -8,13 +8,16 @@ import UserEdit from "./Pages/User/UserEdit";
 
 
 import NavigationBar from "./Component/NavigationBar";
+import ProductTable from "./Pages/Product/ProductTable";
+import ProductForm from "./Pages/Product/ProductForm";
 
 const App = () => {
     return (
         <div>
             <NavigationBar />
             {/* <Sidebar /> */}
-            <UserEdit />
+            {/* <UserEdit /> */}
+            <ProductForm />
             {/* <Header />
             <DetailedHeader />
             <Tables /> */}
