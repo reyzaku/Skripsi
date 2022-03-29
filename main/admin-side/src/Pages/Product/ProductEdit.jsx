@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { GlobalContainer, Title } from '../../PreStyled'
 import image from './test.png'
 
-
 const ImageContainer = styled.div`
     border: 0.5px solid lightgray;
     width: 100%;
@@ -15,7 +14,8 @@ const ImageContainer = styled.div`
 const Image = styled.img`
     height: 100%;
 `
-const ProductForm = () => {
+
+const ProductEdit = () => {
     const HandleButton = () => {
 
     }
@@ -24,9 +24,9 @@ const ProductForm = () => {
             <Breadcrumb>
                 <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
                 <Breadcrumb.Item href="#">Product</Breadcrumb.Item>
-                <Breadcrumb.Item active>Add Product</Breadcrumb.Item>
+                <Breadcrumb.Item active>Edit Product</Breadcrumb.Item>
             </Breadcrumb>
-            <Title>Tambah Product Baru</Title>
+            <Title>Ubah Data [productId]</Title>
             <Form>
                 <Row>
                     <Col>
@@ -109,11 +109,11 @@ const ProductForm = () => {
                     variant='dark'
                     style={{ width: "100%", marginTop: "10px" }}
                     onClick={HandleButton}>
-                    Tambah Produk Baru
+                    Simpan Data
                 </Button>
             </Form>
         </GlobalContainer>
     )
 }
 
-export default ProductForm
+export default ProductEdit

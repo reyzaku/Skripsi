@@ -10,6 +10,8 @@ import UserEdit from "./Pages/User/UserEdit";
 import NavigationBar from "./Component/NavigationBar";
 import ProductTable from "./Pages/Product/ProductTable";
 import ProductForm from "./Pages/Product/ProductForm";
+import ProductDetail from "./Pages/Product/ProductDetail";
+import ProductEdit from "./Pages/Product/ProductEdit";
 
 const App = () => {
     return (
@@ -17,7 +19,7 @@ const App = () => {
             <NavigationBar />
             {/* <Sidebar /> */}
             {/* <UserEdit /> */}
-            <ProductForm />
+            <ProductEdit />
             {/* <Header />
             <DetailedHeader />
             <Tables /> */}
