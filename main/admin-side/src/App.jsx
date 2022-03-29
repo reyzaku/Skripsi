@@ -12,6 +12,9 @@ import ProductTable from "./Pages/Product/ProductTable";
 import ProductForm from "./Pages/Product/ProductForm";
 import ProductDetail from "./Pages/Product/ProductDetail";
 import ProductEdit from "./Pages/Product/ProductEdit";
+import OrderTable from "./Pages/Order/OrderTable";
+import ResiInput from "./Pages/Order/ResiInput";
+import OrderDetail from "./Pages/Order/OrderDetail";
 
 const App = () => {
     return (
@@ -19,7 +22,9 @@ const App = () => {
             <NavigationBar />
             {/* <Sidebar /> */}
             {/* <UserEdit /> */}
-            <ProductEdit />
+            {/* <OrderTable /> */}
+            {/* <ResiInput /> */}
+            <OrderDetail />
             {/* <Header />
             <DetailedHeader />
             <Tables /> */}
