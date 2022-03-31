@@ -1,9 +1,18 @@
 import React from 'react'
-import { Accordion, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
-import styled from 'styled-components'
+import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../redux/userRedux';
 
 
 const NavigationBar = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const LogoutHandle = () => {
+        dispatch(logout())
+        navigate("/login")
+    }
+
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
@@ -26,6 +35,7 @@ const NavigationBar = () => {
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
+                <Button variant="outline-light" onClick={LogoutHandle}>Logout</Button>
             </Container>
         </Navbar>
     )

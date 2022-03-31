@@ -101,11 +101,11 @@ const Login = () => {
                 <Form>
                     <Form.Group className="mb-3">
                         <Form.Label>Email :</Form.Label>
-                        <Form.Control type="text" placeholder='Masukan Email Anda' />
+                        <Form.Control type="text" placeholder='Masukan Email Anda' name='username' value={input.username} onChange={changeHandle}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Password :</Form.Label>
-                        <Form.Control type="password" placeholder='Masukan Password Anda' />
+                        <Form.Control type="password" placeholder='Masukan Password Anda' name='password' value={input.password} onChange={changeHandle}/>
                     </Form.Group>
                     <Button 
                         variant='dark' 

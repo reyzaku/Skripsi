@@ -12,6 +12,24 @@ const Tables = () => {
         {column: "Action", key: 1}
     ]
 
+    const Product = [
+        {column: "No", key: 0},
+        {column: "Order Id", key: 1},
+        {column: "Nama", key: 1},
+        {column: "Total Harga", key: 1},
+        {column: "Tanggal", key: 1},
+        {column: "Action", key: 1}
+    ]
+
+    const User = [
+        {column: "No", key: 0},
+        {column: "Order Id", key: 1},
+        {column: "Nama", key: 1},
+        {column: "Total Harga", key: 1},
+        {column: "Tanggal", key: 1},
+        {column: "Action", key: 1}
+    ]
+
     return (
         <GlobalContainer>
             <Table striped bordered hover>
