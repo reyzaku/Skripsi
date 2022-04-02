@@ -1,7 +1,7 @@
 import react, { useEffect, useState } from 'react'
 import { Breadcrumb, Button, Form, Table } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import Header from '../../Component/Header'
 import { GlobalContainer, Title } from '../../PreStyled'
@@ -25,7 +25,7 @@ const ProductTable = () => {
     const productPerPage = 10
     const pageVisited = pageNumber * productPerPage
     const pageCount = Math.ceil(data?.length / productPerPage)
-    const [bool, setBool] = useState(false)
+    const [restart, setRestart] = useState(false)
 
     useEffect(() => {
         const getData = async () => {
@@ -34,15 +34,20 @@ const ProductTable = () => {
         }
         getData()
         console.log(data)
-    }, [])
+    }, [restart, setRestart])
 
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
 
     const buttonHandle = (event) => {
+        let name = event.target.name
 
+        userRequest.delete(`/product/${name}`).then(
+            setRestart(!restart)
+        )
     }
+
     const BoolChange = (event) => {
         let name = event.target.name
         let value = event.target.checked
@@ -50,7 +55,7 @@ const ProductTable = () => {
         userRequest.put(`/product/${name}`, {
             inStock: value
         }).then(
-            window.location.reload()
+            setRestart(!restart)
         )
     }
 
@@ -82,9 +87,9 @@ const ProductTable = () => {
                     />
                 </td>
                 <td>
-                    <Button variant="primary" className='detail-btn' name='detail' onClick={buttonHandle}>Detail</Button>
-                    <Button variant="warning" className='detail-btn' name='edit' onClick={buttonHandle}>Edit</Button>
-                    <Button variant="danger" className='detail-btn' name='delete' onClick={buttonHandle}>Delete</Button>
+                    <Button variant="primary" className='detail-btn' name='detail' as={Link} to={`/produk/${product._id}`}>Detail</Button>
+                    <Button variant="warning" className='detail-btn' name='edit' href={`/produk/edit/${product._id}`}>Edit</Button>
+                    <Button variant="danger" className='detail-btn' name={product._id} onClick={buttonHandle}>Delete</Button>
                 </td>
             </tr>
         )

@@ -25,15 +25,15 @@ const MainRouter = () => {
                 <Route exact path='/login' element={user ? <Navigate to="/" /> : <Login />} />
                 <Route exact path='/' element={!user ? <Navigate to="/login" /> : <Homepage />} />
                 <Route exact path='/produk' element={!user ? <Navigate to="/login" /> : <ProductTable />} />
-                <Route exact path='/order' element={!user ? <Navigate to="/login" /> : <OrderTable />} />
-                <Route exact path='/user' element={!user ? <Navigate to="/login" /> : <UserTable />} />
-                <Route exact path='/produk/edit/:id' element={!user ? <Navigate to="/login" /> : <ProductEdit />} />
-                <Route exact path='/user/edit/:id' element={!user ? <Navigate to="/login" /> : <UserEdit />} />
-                <Route exact path='/produk/add' element={!user ? <Navigate to="/login" /> : <ProductForm />} />
-                <Route exact path='/user/add' element={!user ? <Navigate to="/login" /> : <UserForm />} />
                 <Route exact path='/produk/:id' element={!user ? <Navigate to="/login" /> : <ProductDetail />} />
-                <Route exact path='/order/:id' element={!user ? <Navigate to="/login" /> : <OrderDetail />} />
+                <Route exact path='/produk/add' element={!user ? <Navigate to="/login" /> : <ProductForm />} />
+                <Route exact path='/produk/edit/:id' element={!user ? <Navigate to="/login" /> : <ProductEdit />} />
+                <Route exact path='/user' element={!user ? <Navigate to="/login" /> : <UserTable />} />
                 <Route exact path='/user/:id' element={!user ? <Navigate to="/login" /> : <UserDetail />} />
+                <Route exact path='/user/add' element={!user ? <Navigate to="/login" /> : <UserForm />} />
+                <Route exact path='/user/edit/:id' element={!user ? <Navigate to="/login" /> : <UserEdit />} />
+                <Route exact path='/order' element={!user ? <Navigate to="/login" /> : <OrderTable />} />
+                <Route exact path='/order/:id' element={!user ? <Navigate to="/login" /> : <OrderDetail />} />
                 <Route exact path='/order/update/:id' element={!user ? <Navigate to="/login" /> : <ResiInput />} />
             </Routes>
         </Router>
