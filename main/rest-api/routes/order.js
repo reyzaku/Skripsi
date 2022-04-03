@@ -88,7 +88,7 @@ router.put("/add/token/:id", (req, res) =>{
     
 })
 
-router.get("/find/:id", async (req, res)=>{
+router.get("/:id", async (req, res)=>{
     try{
         const order = await Order.findOne({invoiceId: req.params.id})
         res.status(200).json(order);
@@ -96,6 +96,7 @@ router.get("/find/:id", async (req, res)=>{
         res.status(500).json(err)
     }
 });
+
 
 router.get("/find", async (req, res) => {
     const qUser = req.query.userId
@@ -171,14 +172,34 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res)=>{
 // });
 
 //Get (Querying All User Account (admin only))
-router.get("/", async (req, res)=>{
+router.get("/", verifyTokenAndAdmin, async (req, res)=>{
+    const query = req.query.search
+    const qNew = req.query.new
     try{
-        const order = await Order.find()
-        res.status(200).json(order)
+        if(qNew){
+            const users = qNew && await Order.find().sort({createdAt: -1}).limit(5)
+            res.status(200).json(users);
+        }else{
+            const order = query ? await Order.find({invoiceId: { "$regex": query, "$options": 'i' }}) :  await Order.find()
+            res.status(200).json(order)
+        }
     }catch(err){
         res.status(500).json(err)
     }
 })
+
+
+
+router.get("/:id", verifyToken, async (req, res)=>{
+    console.log(req.params.id)
+    try{
+        const order = await Order.findOne({invoiceId: req.params.id})
+        res.status(200).json({others});
+
+    }catch(err){
+        res.status(500).json(err)
+    }
+});
 
 //Stats Monthly Income
 
@@ -193,7 +214,7 @@ router.get("/income", verifyTokenAndAdmin, async (req, res)=>{
             {
                 $project: {
                     month: { $month: "$createdAt" },
-                    sales: "$amount",
+                    sales: "$gross_amount",
                 },
             },
             {

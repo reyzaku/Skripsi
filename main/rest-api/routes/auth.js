@@ -15,7 +15,10 @@ router.post("/register", async (req,res)=>{
             process.env.PASS_HASH
         ).toString(),
 
-        notelp: req.body.notelp
+        notelp: req.body.notelp,
+        fullName: `${req.body.firstName} ${req.body.lastName}`,
+        isAdmin: req.body.isAdmin
+
     });
 
     try{

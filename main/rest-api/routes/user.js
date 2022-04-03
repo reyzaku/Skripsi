@@ -39,7 +39,7 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res)=>{
 });
 
 //Get (Querying User Account (admin only))
-router.get("/:id", verifyToken, async (req, res)=>{
+router.get("/find/:id", verifyToken, async (req, res)=>{
     try{
         const user = await User.findById(req.params.id)
         const {password, ...others } = user._doc;
@@ -50,12 +50,19 @@ router.get("/:id", verifyToken, async (req, res)=>{
     }
 });
 
+// {$text: { $search: `\`${query}\`` }}
 //Get (Querying All User Account (admin only))
 router.get("/", verifyTokenAndAdmin, async (req, res)=>{
-    const query = req.query.new
+    const query = req.query.search
+    const qNew = req.query.new
     try{
-        const users = query ? await User.find().sort({_id:-1}).limit(5) :  await User.find()
-        res.status(200).json(users);
+        if(qNew) {
+            const users = qNew && await User.find().sort({createdAt: -1}).limit(5)
+            res.status(200).json(users);
+        } else {
+            const users = query ? await User.find({fullName: { "$regex": query, "$options": 'i' }}) :  await User.find()
+            res.status(200).json(users);
+        }
     }catch(err){
         res.status(500).json(err)
     }
