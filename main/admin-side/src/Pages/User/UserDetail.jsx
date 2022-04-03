@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Breadcrumb, Button, Form, Row, Col } from 'react-bootstrap'
+import { Breadcrumb, Button, Form, Row, Col, Figure } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import { GlobalContainer, Title } from '../../PreStyled'
 import { userRequest } from '../../reqMethod'
@@ -15,14 +15,10 @@ const UserDetail = () => {
         image: null,
     })
     const {id} = useParams()
-    console.log(id)
-    const HandleButton = () => {
-
-    }
 
     useEffect(() => {
         const getData = async () => {
-            const res = await userRequest.get(`/user/${id}`)
+            const res = await userRequest.get(`/user/find/${id}`)
             setData({
                 username: res.data.others.username,
                 email: res.data.others.email,
@@ -49,6 +45,20 @@ const UserDetail = () => {
                 <Button variant="warning" className="mb-3 px-5" as={Link} to={`/user/edit/${id}`}>Edit data</Button>
             </div>
             <Form>
+                <Row>
+                    <Col>
+                        <Figure>
+                            <Form.Label>Profile Image :</Form.Label><br/>
+                            <Figure.Image 
+                                width={150}
+                                height={150}
+                                alt="171x180"
+                                src={"https://picsum.photos/200"}
+                            />
+                        </Figure>
+                    </Col>
+                    <Col></Col>
+                </Row>
                 <Form.Group className="mb-3">
                     <Form.Label>Username :</Form.Label>
                     <Form.Control type="text" value={data.username} disabled/>

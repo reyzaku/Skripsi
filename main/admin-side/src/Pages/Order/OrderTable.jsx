@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Breadcrumb, Button, Table } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import styled from 'styled-components'
 import Header from '../../Component/Header'
 import { GlobalContainer, Title } from '../../PreStyled'
 import OrderData from '../../Order_data.json'
+import { userRequest } from '../../reqMethod'
+import { convertRupiah } from '../../utils/ConvertRupiah'
+import { format } from 'timeago.js'
+import { Link } from 'react-router-dom'
 
 const OrderTable = () => {
     const [data, setData] = useState(OrderData.slice(0, 200))
     const [pageNumber, setPageNumber] = useState(0)
+    const [restart, setRestart] = useState(false)
+    const [search, setSearch] = useState(null)
 
     const navigate = () => {
 
@@ -22,16 +28,33 @@ const OrderTable = () => {
 
     }
 
-    const displayedOrder = data.slice(pageVisited, pageVisited + orderPerPage).map(order => {
+    useEffect(()=> {
+        const getData = async () => {
+            if(search) {
+                const res = await userRequest.get(`/order/?search=${search}`)
+                setData(res.data)
+                console.log(res.data)
+            } else {
+                const res = await userRequest.get('/order')
+                setData(res.data)
+                console.log(res.data)
+            }
+            console.log(data)
+        }
+        getData()
+    }, [restart, setRestart])
+
+    const displayedOrder = data.slice(pageVisited, pageVisited + orderPerPage).map((order, index) => {
         return (
-            <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.invoice_id}</td>
-                <td>{order.gross_amount}</td>
+            <tr key={order._id}>
+                <td>{index + 1}</td>
+                <td>{order.invoiceId}</td>
+                <td>{convertRupiah(order.gross_amount)}</td>
                 <td>{order.status}</td>
-                <td>{order.created_at}</td>
+                <td>{format(order.createdAt)}</td>
+                <td>{format(order.updatedAt)}</td>
                 <td>
-                    <Button variant="primary" className='detail-btn' name='detail' onClick={navigate(`/detail/${order.id}`)}>Detail</Button>
+                    <Button variant="primary" className='detail-btn' name='detail' as={Link} to={`/order/${order.invoiceId}`}>Detail</Button>
                     {order.status === "Pending" ?
                         <Button variant="dark" className='detail-btn' name='detail'>Update Resi</Button> : <></>
                     }
@@ -53,7 +76,7 @@ const OrderTable = () => {
             </Breadcrumb>
             <Title>Daftar Order</Title>
             <Header />
-            <Table striped bordered hover>
+            <Table striped bordered hover className='table align-middle mb-0 px-1 bg-white'>
                 <thead>
                     <tr>
                         <th>No</th>
@@ -61,6 +84,7 @@ const OrderTable = () => {
                         <th>Nominal</th>
                         <th>Status Transaksi</th>
                         <th>Tanggal Transaksi</th>
+                        <th>Update Terakhir</th>
                         <th>Action</th>
                     </tr>
                 </thead>

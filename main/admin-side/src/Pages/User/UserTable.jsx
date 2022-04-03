@@ -44,7 +44,7 @@ const UserTable = () => {
     useEffect(()=> {
         const getData = async () => {
             if(search) {
-                const res = await userRequest.get(`/user`)
+                const res = await userRequest.get(`/user/?search=${search}`)
                 setData(res.data)
             } else {
                 const res = await userRequest.get('/user')
@@ -57,7 +57,7 @@ const UserTable = () => {
 
     const displayedUser = data.slice(pageVisited, pageVisited + userPerPage).map((user, index) => {
         return (
-            <tr key={user._id}>
+            <tr key={index + 1}>
                 <td>{index + 1}</td>
                 <td>{user.fullName}</td>
                 <td>{user.username}</td>

@@ -1,11 +1,13 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { Breadcrumb, Button, Form, Col, Row } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Breadcrumb, Button, Form, Col, Row, Modal, Container } from 'react-bootstrap'
 import styled from 'styled-components'
 import { GlobalContainer, Title } from '../../PreStyled'
-import { publicRequest } from '../../reqMethod'
+import { userRequest } from '../../reqMethod'
 import image from './test.png'
-
+import UseAnimations from "react-useanimations";
+import radioButton from 'react-useanimations/lib/checkmark'
+import { Link } from 'react-router-dom'
 
 const ImageContainer = styled.div`
     border: 0.5px solid lightgray;
@@ -28,12 +30,17 @@ const ProductForm = () => {
         inStock: false
     })
 
+    const [show, setShow] = useState({
+        sucess: false,
+        error: false
+    })
+
     const HandleButton = (event) => {
         event.preventDefault()
-        publicRequest.post("/product", input).then(
-
-        ).catch(
-
+        userRequest.post("/product", input).then(()=>{
+            setShow({...show, sucess: true})
+        }).catch(
+            setShow({...show, error: true})
         )
     }
 
@@ -69,6 +76,10 @@ const ProductForm = () => {
         }
     }
 
+    const CloseModal = () => {
+        setShow({...show, error: false})
+    }
+
     return (
         <GlobalContainer>
             <Breadcrumb>
@@ -77,6 +88,45 @@ const ProductForm = () => {
                 <Breadcrumb.Item active>Add Product</Breadcrumb.Item>
             </Breadcrumb>
             <Title>Tambah Product Baru</Title>
+            <Modal
+                show={show.sucess}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header>
+                    <Modal.Title>Notice</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container className='d-flex justify-content-center align-items-center'>
+                        <h4 className='my-5 mx-2'>Produk Baru Telah Dibuat</h4>
+                        <UseAnimations animation={radioButton} autoPlay={true} size={50}/>
+                    </Container>
+                    <Container className='d-flex justify-content-center'>
+                        <Button variant="primary" as={Link} to={`/produk`}>Understood</Button>
+                    </Container>
+                </Modal.Body>
+            </Modal>
+
+            <Modal
+                show={show.error}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header>
+                    <Modal.Title>Notice</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container className='d-flex justify-content-center align-items-center'>
+                        <h4 className='my-5 mx-2'>Produk Baru gagal dibuat</h4>
+                        <UseAnimations animation={radioButton} autoPlay={true} size={50}/>
+                    </Container>
+                    <Container className='d-flex justify-content-center'>
+                        <Button variant="danger" onClick={CloseModal}>Understood</Button>
+                    </Container>
+                </Modal.Body>
+            </Modal>
             <Form>
                 <Row>
                     <Col>
@@ -96,42 +146,15 @@ const ProductForm = () => {
                             <Form.Text className='text-muted'>
                                 Masukan ukuran dengan koma sebagai pemisah dan tanpa spasi
                             </Form.Text>
-                            {/* <Row>
-                                <Col>
-                                    <Form.Check
-                                        type="checkbox"
-                                        name="xl" value="XL"
-                                        label="XL"
-                                        onChange={e => setInput(...input.size, e.target.value)}
-                                    />
-                                    <Form.Check
-                                        type="checkbox"
-                                        name="l" value="L"
-                                        label="L"
-                                    />
-                                </Col>
-                                <Col>
-                                    <Form.Check
-                                        type="checkbox"
-                                        name="m" value="M"
-                                        label="M"
-                                    />
-                                    <Form.Check
-                                        type="checkbox"
-                                        name="s" value="S"
-                                        label="S"
-                                    />
-                                </Col>
-                            </Row> */}
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group className='mb-3'>
                             <Form.Label>Upload Gambar Product</Form.Label>
                             <ImageContainer>
-                                <Image src={image} />
+                                <Image src={input.image} />
                             </ImageContainer>
-                            <Form.Control type="file" accept="image/png, image/jpeg"/>
+                            <Form.Control type="file" accept="image/png, image/jpeg, image/jpg" value={input.image}  name='image' onChange={ChangeHandle}/>
                         </Form.Group>
                     </Col>
                 </Row>

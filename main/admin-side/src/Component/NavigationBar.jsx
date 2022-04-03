@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../redux/userRedux';
 
 
@@ -16,22 +16,23 @@ const NavigationBar = () => {
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#home">AISHA.CO</Navbar.Brand>
+                <Navbar.Brand as={Link} to={`/`}>AISHA.CO</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <NavDropdown title="Product" id="collasible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Product List</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Add Product</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={`/produk`}>Product List</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={`/produk/add`}>Add Product</NavDropdown.Item>
                         </NavDropdown>
 
                         <NavDropdown title="Order" id="collasible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Order List</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Add Resi</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={`/order`}>Order List</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={`/`}>Add Resi</NavDropdown.Item>
                         </NavDropdown>
 
                         <NavDropdown title="User" id="collasible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">User List</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={`/user`}>User List</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={`/user/add`}>Add User</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>

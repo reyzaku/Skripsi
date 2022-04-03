@@ -1,5 +1,5 @@
 import react, { useEffect, useState } from 'react'
-import { Breadcrumb, Button, Form, Table } from 'react-bootstrap'
+import { Breadcrumb, Button, Form, Stack, Table } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
@@ -9,7 +9,18 @@ import ProductData from '../../Product_data.json'
 import { publicRequest, userRequest } from '../../reqMethod';
 import { convertRupiah } from '../../utils/ConvertRupiah';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import SearchIcon from '@mui/icons-material/Search';
 
+const Wrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+`
+
+const FormContainer = styled.div`
+    display: flex;
+    width: 200px;
+`
 
 const Tdata = styled.td`
     color: ${props => props.status ? "green" : "red"};
@@ -19,13 +30,12 @@ const Tdata = styled.td`
 
 const ProductTable = () => {
     const [data, setData] = useState(ProductData.slice(0, 200))
-    const [product, setProduct] = useState(null)
     const [pageNumber, setPageNumber] = useState(0)
-    const navigate = useNavigate()
     const productPerPage = 10
     const pageVisited = pageNumber * productPerPage
     const pageCount = Math.ceil(data?.length / productPerPage)
     const [restart, setRestart] = useState(false)
+    const [search, setSearch] = ""
 
     useEffect(() => {
         const getData = async () => {
@@ -59,13 +69,23 @@ const ProductTable = () => {
         )
     }
 
+    const SearchHandle = (event) => {
+        let value = event.target.value
+        setSearch(value)
+        setRestart(!restart)
+    }
+
+    const GetImage = () => {
+        
+    }
+
     
 
     const displayedProduct = data?.slice(pageVisited, pageVisited + productPerPage).map((product, index) => {
         
 
         return (
-            <tr key={product._id}>
+            <tr key={index + 1}>
                 <td>{index + 1}</td>
                 <td>{product.title}</td>
                 <td>{convertRupiah(product.price)}</td>
@@ -105,8 +125,18 @@ const ProductTable = () => {
                 <Breadcrumb.Item active>Daftar Produk</Breadcrumb.Item>
             </Breadcrumb>
             <Title>Daftar Product</Title>
-            <Header />
-            <Table striped bordered hover>
+            <Wrapper>
+                    <Stack direction="horizontal" gap={2}>
+                        <Button variant="primary" className="w-100" as={Link} to={`/produk/add`}>Tambah Data</Button>
+                    </Stack>
+                    <FormContainer>
+                        <Form.Control type="text" placeholder="Cari data" name="search" value={search} onChange={SearchHandle}/>
+                        <Button variant="dark">
+                            <SearchIcon />
+                        </Button>
+                    </FormContainer>
+                </Wrapper>
+            <Table striped bordered hover className='table align-middle mb-0 px-1 bg-white'>
                 <thead>
                     <tr>
                         <th>No</th>
