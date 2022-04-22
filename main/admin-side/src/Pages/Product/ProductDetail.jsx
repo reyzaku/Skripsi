@@ -89,7 +89,6 @@ const ProductDetail = () => {
                             <ImageContainer>
                                 <Image name='image' src={data.image} />
                             </ImageContainer>
-                            <Form.Control type="file" disabled/>
                         </Form.Group>
                     </Col>
                 </Row>

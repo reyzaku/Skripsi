@@ -8,6 +8,9 @@ import image from './test.png'
 import UseAnimations from "react-useanimations";
 import radioButton from 'react-useanimations/lib/checkmark'
 import { Link } from 'react-router-dom'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from '../../firebase'
+
 
 const ImageContainer = styled.div`
     border: 0.5px solid lightgray;
@@ -35,9 +38,58 @@ const ProductForm = () => {
         error: false
     })
 
-    const HandleButton = (event) => {
+    const [file, setFile] = useState(null)
+
+    const UploadImage = () => { 
+        if(file === null) {
+            console.log("File Kosong!")
+        }else {
+            const fileName = new Date().getTime() + file.name;
+            const storage = getStorage(app);
+            const storageRef = ref(storage, fileName)
+    
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            // Register three observers:
+            // 1. 'state_changed' observer, called any time the state changes
+            // 2. Error observer, called on failure
+            // 3. Completion observer, called on successful completion
+            uploadTask.on('state_changed',
+            (snapshot) => {
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                case 'paused':
+                    console.log('Upload is paused');
+                    break;
+                case 'running':
+                    console.log('Upload is running');
+                    break;
+                default: 
+                    break;
+                }
+                
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            () => {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setInput({...input, image: downloadURL})
+                    console.log('File available at', downloadURL);
+                });
+            }
+            );
+        }
+
+    }
+
+    const HandleButton = async (event) => {
         event.preventDefault()
-        userRequest.post("/product", input).then(()=>{
+        await userRequest.post("/product", input).then(()=>{
             setShow({...show, sucess: true})
         }).catch(
             setShow({...show, error: true})
@@ -71,6 +123,14 @@ const ProductForm = () => {
             }
             case "stock": {
                 setInput({...input, inStock: value})
+                break;
+            }
+            // case "image": {
+            //     setFile(event.target.files)
+            //     // const fileName = new Date().getTime() + file.name;
+            //     console.log(file)
+            // }
+            default: {
                 break;
             }
         }
@@ -132,7 +192,7 @@ const ProductForm = () => {
                     <Col>
                         <Form.Group className="mb-3">
                             <Form.Label>Nama Product :</Form.Label>
-                            <Form.Control type="text" placeholder='Masukan Nama Depan Anda' name='title' onChange={ChangeHandle} value={input.title}/>
+                            <Form.Control type="text" placeholder='Masukan Nama Produk' name='title' onChange={ChangeHandle} value={input.title}/>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -154,7 +214,13 @@ const ProductForm = () => {
                             <ImageContainer>
                                 <Image src={input.image} />
                             </ImageContainer>
-                            <Form.Control type="file" accept="image/png, image/jpeg, image/jpg" value={input.image}  name='image' onChange={ChangeHandle}/>
+                            <Form.Control type="file" accept="image/png, image/jpeg, image/jpg" name='image' onChange={(e) => setFile(e.target.files[0])}/>
+                            <Button
+                                className='mt-3'
+                                variant='dark'
+                                onClick={UploadImage}>
+                                Upload Gambar
+                            </Button>
                         </Form.Group>
                     </Col>
                 </Row>
