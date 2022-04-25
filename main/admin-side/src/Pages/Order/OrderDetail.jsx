@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Breadcrumb, Button, Form, Row, Col, Container, Card } from 'react-bootstrap'
-import { useParams } from 'react-router-dom'
+import { Breadcrumb, Button, Form, Row, Col, Container, Card, Modal } from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { format } from 'timeago.js'
 import { GlobalContainer, Title } from '../../PreStyled'
@@ -13,6 +13,7 @@ import { convertRupiah } from '../../utils/ConvertRupiah'
 
 const OrderDetail = () => {
     const [data, setData] = useState({
+        id: "",
         invoiceId: "",
         status: "",
         amount: 0,
@@ -23,8 +24,14 @@ const OrderDetail = () => {
         address: "",
         createdAt: "",
         updatedAt: "",
-        products: []
+        products: [],
+        resi: ""
     })
+
+    const [payload, setPayload] = useState({
+        resi: ""
+    })
+    const [show, setShow] = useState(false)
     const {id} = useParams()
     const [restart, setRestart] = useState(false)
 
@@ -32,6 +39,7 @@ const OrderDetail = () => {
         const getData = async () => {
             const res = await userRequest.get(`/order/${id}`)
             setData({
+                id: res.data._id,
                 invoiceId: res.data.invoiceId,
                 status: res.data.status,
                 amount: res.data.gross_amount,
@@ -42,7 +50,8 @@ const OrderDetail = () => {
                 address: res.data.address,
                 createdAt: res.data.createdAt,
                 updatedAt: res.data.updatedAt,
-                products: res.data.products
+                products: res.data.products,
+                resi: res.data.resi
             })
             console.log(res.data)
         }
@@ -54,6 +63,26 @@ const OrderDetail = () => {
         setRestart(!restart)
     }
 
+    const ModalShow = () => {
+        setShow(true)
+    }
+
+    const UpdateResi = (event) => {
+        event.preventDefault()
+        try {
+            userRequest.put(`/order/${data.id}`, payload)
+            window.alert("Data Berhasil Di Update")
+            setRestart(!restart)
+            setShow(false)
+        }catch{
+            window.alert("Data Gagal Di Update")
+            setRestart(!restart)
+            setShow(false)
+        }
+    }
+
+
+
     return (
         <GlobalContainer>
             <Breadcrumb>
@@ -61,20 +90,49 @@ const OrderDetail = () => {
                 <Breadcrumb.Item href="#">Order</Breadcrumb.Item>
                 <Breadcrumb.Item active>{data.invoiceId}</Breadcrumb.Item>
             </Breadcrumb>
+            <Modal
+                show={show}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header>
+                    <Modal.Title>Update Resi</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container className='mx-auto'>
+                        <Form.Group as={Col} className="mb-3">
+                            <Form.Label>No. Resi :</Form.Label>
+                            <Form.Control type="text" onChange={(e) => setPayload({...payload, resi: e.target.value})}/>
+                        </Form.Group>
+
+                    </Container>
+                    <Container className='mx-auto'>
+                        <Button variant="primary" onClick={UpdateResi}>Update</Button>
+                    </Container>
+                </Modal.Body>
+            </Modal>
             <Title>Detail {data.invoiceId}</Title>
             <div className="d-grid gap-2">
-                <Button variant="warning" className="mb-3 px-5">Update Resi</Button>
+                <Button variant="warning" className="mb-3 px-5" onClick={ModalShow}>Update Resi</Button>
             </div>
 
             <Form>
                 <Row>
                     <Col>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Status Transaksi :</Form.Label>
-                            <h3 style={{ color: "#0d6efd" }}>{data.status}</h3>
-                            {/* <h3 style={{ color: "#ffc107" }}>Pending</h3>
-                            <h3 style={{ color: "#dc3545" }}>Cancel</h3> */}
-                        </Form.Group>
+                        <Row>
+                            <Form.Group as={Col} className="mb-3">
+                                <Form.Label>Status Transaksi :</Form.Label>
+                                <h3 style={{ color: "#0d6efd" }}>{data.status}</h3>
+                                {/* <h3 style={{ color: "#ffc107" }}>Pending</h3>
+                                <h3 style={{ color: "#dc3545" }}>Cancel</h3> */}
+                            </Form.Group>
+                            <Form.Group as={Col} className="mb-3">
+                                <Form.Label>No. Resi :</Form.Label>
+                                <Form.Control type="text" disabled value={data.resi} />
+                            </Form.Group>
+
+                        </Row>
                         <Row>
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>No. Invoice :</Form.Label>

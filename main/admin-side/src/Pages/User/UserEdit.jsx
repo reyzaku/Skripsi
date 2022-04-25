@@ -40,7 +40,7 @@ const UserEdit = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const res = await userRequest.get(`/user/${id}`)
+            const res = await userRequest.get(`/user/find/${id}`)
             setData({
                 username: res.data.others.username,
                 email: res.data.others.email,

@@ -95,7 +95,7 @@ const ProductForm = () => {
             setShow({...show, error: true})
         )
     }
-
+    
     const ChangeHandle = (event) => {
         let value = event.target.value
         let name = event.target.name
