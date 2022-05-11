@@ -11,7 +11,19 @@ import { Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import axios from 'axios';
 import ProductGrid from '../component/ProductGrid';
+import { Row } from 'react-bootstrap';
+import ProductCard from '../component/ProductCard';
 
+
+const Container = styled.div`
+    margin: 100px 70px;
+
+    @media (max-width: 480px) {
+        width: 100%;
+        margin: 10px auto;
+    }
+    
+`
 const Wrapper = styled.div`
     flex: 1;
     margin: 4px 4px 40px 4px;
@@ -50,7 +62,7 @@ const FilterContainer = styled.div`
   margin: 20px 70px;
 `
 
-const  Filter = styled.div`
+const Filter = styled.div`
     display: flex;
    align-items: center;
 `
@@ -114,11 +126,12 @@ const Price = styled.p`
 const ProductList = () => {
 
     const location = useLocation()
+    const { id } = useParams()
     const cat = location.pathname.split("/")[2]
     const [filter, setFilters] = useState({})
     const [sort, setSort] = useState("Baru")
 
-    const [product, setProduct] = useState(null)
+    const [product, setProduct] = useState([])
 
     const handleFilter = (e) => {
         const value = e.target.value
@@ -126,29 +139,40 @@ const ProductList = () => {
             [e.target.name]: value
         })
     }
-
-    let apiUrl = `http://localhost:5000/api/product?category=${cat}`
-
-    useEffect( ()=> {
-        if(product === null) {
-            axios.get(apiUrl)
-            .then(res => {
-                let data = res.data
-                setProduct(data.map(e => {
-                    return {
-                        id: e._id,
-                        title: e.title,
-                        image: e.image,
-                        price: e.price
-                    }
-                }))
-            })
-        }
-    }, [product, setProduct])
+    let apiUrl = location.pathname === "/katalog" ? `http://localhost:5000/api/product` : `http://localhost:5000/api/product?category=${cat}`
+    console.log(location)
+    console.log(apiUrl)
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const res = await axios.get(
+                    apiUrl
+                )
+                setProduct(res.data)
+            } catch (err) { }
+        };
+        getProduct();
+    }, [cat]);
+    // useEffect(() => {
+    //     if (product === null) {
+    //         axios.get(apiUrl)
+    //             .then(res => {
+    //                 let data = res.data
+    //                 setProduct(data.map(e => {
+    //                     return {
+    //                         id: e._id,
+    //                         title: e.title,
+    //                         image: e.image,
+    //                         price: e.price
+    //                     }
+    //                 }))
+    //             })
+    //     }
+    // }, [product, setProduct])
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <FilterContainer>
                 {/* <Filter>
                     <FilterText>Urutkan :</FilterText><br/>
@@ -169,13 +193,22 @@ const ProductList = () => {
                     </FilterSelection>
                 </Filter>  */}
             </FilterContainer>
-            <ProductGrid cat={cat}/>
-      
-            <Newsletter/>
-            <Footer/>
+            <Container>
+
+                <Row>
+
+                    {product.map((item) => (
+                        <ProductCard item={item} key={item._id} />
+                    ))}
+                </Row>
+            </Container>
+
+
+            <Newsletter />
+            <Footer />
         </div>
-    
-  );
+
+    );
 };
 
 export default ProductList;

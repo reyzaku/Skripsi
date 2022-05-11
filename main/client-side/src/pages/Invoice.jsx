@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Footer from '../component/Footer'
 import Navbar from '../component/Navbar'
+import { userRequest } from '../reqMethod'
 
 const Container = styled.div`
     width: ${props => props.subcontainer === true ? "100%" : "50%"};
@@ -16,6 +17,7 @@ const Container = styled.div`
         margin: 50px auto;
     }
 `
+
 const SubContainer = styled.div`
     padding: 50px;
 
@@ -94,15 +96,14 @@ const Button = styled.button`
 `
 
 const Invoice = () => {
-    const {id} = useParams()
+    const { id } = useParams()
     console.log(id)
-    const apiUrl = `http://localhost:5000/api/order/find?invoiceId=${id}`
     const [invoice, setInvoice] = useState({})
     const [product, setProduct] = useState([])
 
     useEffect(() => {
         const getInvoice = async () => {
-            const res = await axios.get(apiUrl)
+            const res = await userRequest.get("/order")
             setInvoice(res.data)
             setProduct(res.product)
             console.log(res.data)
@@ -117,7 +118,7 @@ const Invoice = () => {
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <Title main={true}>Detail Pemesanan</Title>
             <Container>
                 <SubContainer>
@@ -144,7 +145,7 @@ const Invoice = () => {
                     <Title subtitle={true}>Detail Barang</Title>
                     {invoice?.products?.map((product, index) => (
                         <Container subcontainer={true} key={index + 1}>
-                            <Image src={product.image}/>
+                            <Image src={product.image} />
                             <Detail>
                                 <ProductTitle>{product.title}</ProductTitle>
                                 <Text>Ukuran : {product.size}</Text>
@@ -191,7 +192,7 @@ const Invoice = () => {
                     }
                 </SubContainer>
             </Container>
-            <Footer/>
+            <Footer />
         </div>
 
     )

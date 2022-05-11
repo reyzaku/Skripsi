@@ -1,54 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import styled from 'styled-components'
 import { FeaturedProducts } from '../data';
+import { publicRequest } from '../reqMethod';
 import ProductCard from './ProductCard';
 
-
-const Wrapper = styled.div`
-    margin: 100px 50px;
-
-    @media (max-width: 480px) {
-        margin: 20px auto;
-    }
-`
-
-const TitleSection = styled.div`
-    margin: auto 20px;
-    display: flex;
-    justify-content: space-between;
-    
-`
-
-const Title = styled.h2`
-    
-`
-
-const SeeAll = styled.p`
-    text-decoration: underline;
-    color: #151542;
-`
-
-const Container = styled.div`
-    display: flex;
-    padding: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-`
-
 const FeaturedProduct = () => {
+    const [data, setData] = useState(FeaturedProducts)
+    const [restart, setRestart] = useState(false)
+
+
+    useEffect(() => {
+        const getData = async () => {
+            const res = await publicRequest.get(`/product`)
+            setData(res.data)
+            console.log(data)
+        }
+        getData()
+    }, [restart, setRestart])
     return (
-        <Wrapper>
-            <TitleSection>
-                <Title>Featured Products</Title>
-                <SeeAll>See All</SeeAll>
-            </TitleSection>
-            
-            <Container>
-                {FeaturedProducts.map(item=>(
-                    <ProductCard item={item} key={item.id}/>
+        <Container fluid>
+            <Row>
+                {data.map(item => (
+                    <Col>
+                        <ProductCard item={item} key={item._id} />
+                    </Col>
                 ))}
-            </Container>  
-        </Wrapper>
+            </Row>
+        </Container>
     )
 }
 

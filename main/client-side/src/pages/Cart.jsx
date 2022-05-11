@@ -8,6 +8,7 @@ import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
 import { useSelector } from 'react-redux';
 import { convertRupiah } from '../utils/convertRupiah';
+import { userRequest } from '../reqMethod';
 
 
 const Container = styled.div`
@@ -135,7 +136,7 @@ const Cart = () => {
     const user = useSelector(state => state.user.currentUser)
     const cart = useSelector(state => state.cart)
     let navigate = useNavigate()
-    const tax = (cart.total * 10)/ 100
+    const tax = (cart.total * 10) / 100
     const ongkir = 4500 * cart.quantity
     console.log(user._id)
     console.log(cart.total)
@@ -154,7 +155,7 @@ const Cart = () => {
     //         setCart(data)
     //     })
     // }, []);
-    
+
     // const numb = 1000000;
     // const format = numb.toString().split('').reverse().join('');
     // const convert = format.match(/\d{1,3}/g);
@@ -165,7 +166,7 @@ const Cart = () => {
 
     // let tax = (amount * 10) / 100
     // console.log(cart)
-    const checkoutHandle = () => {
+    const checkoutHandle = async () => {
         let date = new Date()
         let day = date.getDate()
         let month = date.getMonth()
@@ -173,7 +174,7 @@ const Cart = () => {
         let rand = Math.floor(Math.random() * 3000)
         let invoiceNum = `ORDER-${day}${month}${year}${rand}`
 
-        axios.post("http://localhost:5000/api/order/add", {
+        await userRequest.post("/order/add", {
             userId: user._id,
             invoiceId: invoiceNum,
             products: cart.products,
@@ -219,11 +220,11 @@ const Cart = () => {
                     </SubContainer>
                     <SubContainer>
                         <Tax>Pajak</Tax>
-                        <Tax>{convertRupiah((cart.total * 10)/ 100)}</Tax>
+                        <Tax>{convertRupiah((cart.total * 10) / 100)}</Tax>
                     </SubContainer>
                     <SubContainer>
                         <Estimated>Total Harga</Estimated>
-                        <Estimated>{convertRupiah(((cart.total * 10)/ 100) + cart.total)}</Estimated>
+                        <Estimated>{convertRupiah(((cart.total * 10) / 100) + cart.total)}</Estimated>
                     </SubContainer>
                     <Link to={"/katalog"}>
                         <Button>Tambah Product Lagi</Button>

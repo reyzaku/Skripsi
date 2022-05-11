@@ -164,15 +164,15 @@ const Button = styled.button`
 
 const Product = (cat) => {
     const user = useSelector((state) => state.user.currentUser);
-    const {id} = useParams()
+    const { id } = useParams()
     let navigate = useNavigate()
     const [product, setProduct] = useState({})
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState("")
     const dispatch = useDispatch()
-    const urlApi = `http://localhost:5000/api/product/find/${id}`
-    
-    useEffect(() =>{
+    const urlApi = `/product/find/${id}`
+
+    useEffect(() => {
         const getProduct = async () => {
             try {
                 const res = await axios.get(
@@ -180,16 +180,16 @@ const Product = (cat) => {
                 )
                 setProduct(res.data)
                 console.log(res.data)
-            }catch(err){}
+            } catch (err) { }
         };
         getProduct();
     }, []);
 
     const addToCartHandle = () => {
-        if(user === null) {
+        if (user === null) {
             navigate("/login")
         } else {
-            dispatch(addProduct({...product, quantity, size}))
+            dispatch(addProduct({ ...product, quantity, size }))
         }
         // let userId = user.userId
         // let token = user.token
@@ -198,7 +198,7 @@ const Product = (cat) => {
         //     navigate("/")
         // } else {
         //     axios.put(`http://localhost:5000/api/cart/add/${userId}`,
-            
+
         //     {
         //         userId : userId,
         //         products : 
@@ -228,69 +228,69 @@ const Product = (cat) => {
         }
     };
 
-    const changeHandle = (event) =>{
+    const changeHandle = (event) => {
         let value = event.target.value
         let name = event.target.name
 
-        switch(name){
-            case "sizeContainer" : {
+        switch (name) {
+            case "sizeContainer": {
                 setSize(value)
                 break;
             }
-            case "quantityContainer" : {
+            case "quantityContainer": {
                 setQuantity(value)
                 break;
             }
-            default:{
+            default: {
                 break;
             }
         }
     }
-    
+
 
     return (
-      <Container>
-          <Navbar/>
-          <Wrapper>
-              <ImageContainer>
-                  <Image src={product.image}/>
-              </ImageContainer>
-              <InfoContainer>
-                  <ProductTitle>
-                      {product.title}
-                  </ProductTitle>
-                  <ProductDesc>
-                      {product.desc}
-                  </ProductDesc>
-                  <ProductPrice>
-                      {product.price}
-                  </ProductPrice>
-                  <VariantContainer>
-                      <SizeSelector>
-                        <SizeText>Pilih Ukuran :</SizeText>  
-                        <FilterSelection onChange={changeHandle} name="sizeContainer">    
-                            <Option value="S" defaultValue={size}>S</Option>
-                            <Option value="M">M</Option>
-                            <Option value="L">L</Option>
-                            <Option value="XL">XL</Option>
-                        </FilterSelection>
-                      </SizeSelector>
-                  </VariantContainer>
-                  <AmountContainer>
-                      <AmountText>Jumlah :</AmountText>
-                      <AmountButton>
-                            <RemoveAmount onClick={() => quantityHandle("dec")}><Remove/></RemoveAmount>
+        <Container>
+            <Navbar />
+            <Wrapper>
+                <ImageContainer>
+                    <Image src={product.image} />
+                </ImageContainer>
+                <InfoContainer>
+                    <ProductTitle>
+                        {product.title}
+                    </ProductTitle>
+                    <ProductDesc>
+                        {product.desc}
+                    </ProductDesc>
+                    <ProductPrice>
+                        {product.price}
+                    </ProductPrice>
+                    <VariantContainer>
+                        <SizeSelector>
+                            <SizeText>Pilih Ukuran :</SizeText>
+                            <FilterSelection onChange={changeHandle} name="sizeContainer">
+                                <Option value="S" defaultValue={size}>S</Option>
+                                <Option value="M">M</Option>
+                                <Option value="L">L</Option>
+                                <Option value="XL">XL</Option>
+                            </FilterSelection>
+                        </SizeSelector>
+                    </VariantContainer>
+                    <AmountContainer>
+                        <AmountText>Jumlah :</AmountText>
+                        <AmountButton>
+                            <RemoveAmount onClick={() => quantityHandle("dec")}><Remove /></RemoveAmount>
                             <Amount>{quantity}</Amount>
-                            <AddAmount onClick={() => quantityHandle("inc")}><Add/></AddAmount>
-                      </AmountButton>
-                  </AmountContainer>
-                  <Button onClick={addToCartHandle}>Add Product to Cart</Button>
-              </InfoContainer>
-          </Wrapper>
-          <Newsletter/>
-          <Footer/>
-      </Container>
-  );
+                            <AddAmount onClick={() => quantityHandle("inc")}><Add /></AddAmount>
+                        </AmountButton>
+                    </AmountContainer>
+                    <Button onClick={addToCartHandle}>Add Product to Cart</Button>
+                </InfoContainer>
+            </Wrapper>
+            <Newsletter />
+            <Footer />
+        </Container>
+    );
 };
 
 export default Product;

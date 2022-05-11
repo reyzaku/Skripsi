@@ -145,9 +145,9 @@ const SubContainer = styled.div`
 
 
 const CheckoutOne = () => {
-    const {id} = useParams()
+    const { id } = useParams()
     const cart = useSelector(state => state.cart)
-    const tax = (cart.total * 10)/ 100
+    const tax = (cart.total * 10) / 100
     const ongkir = 4500 * cart.quantity
     const navigate = useNavigate()
     const [address, setAddress] = useState({
@@ -165,33 +165,33 @@ const CheckoutOne = () => {
         let value = event.target.value
         let name = event.target.name
         console.log(address)
-        switch(name){
+        switch (name) {
             case "name": {
-                setAddress({...address, name: value})
+                setAddress({ ...address, name: value })
                 break;
             }
             case "notelp": {
-                setAddress({...address, notelp: value})
+                setAddress({ ...address, notelp: value })
                 break;
             }
             case "email": {
-                setAddress({...address, email: value})
+                setAddress({ ...address, email: value })
                 break;
             }
             case "alamat": {
-                setAddress({...address, alamat: value})
+                setAddress({ ...address, alamat: value })
                 break;
             }
             case "provinsi": {
-                setAddress({...address, provinsi: value})
+                setAddress({ ...address, provinsi: value })
                 break;
             }
             case "kota": {
-                setAddress({...address, kota: value})
+                setAddress({ ...address, kota: value })
                 break;
             }
             case "kodepos": {
-                setAddress({...address, kodepos: value})
+                setAddress({ ...address, kodepos: value })
                 break;
             }
             default: {
@@ -202,13 +202,13 @@ const CheckoutOne = () => {
 
     const submitHandle = async (event) => {
         event.preventDefault()
-        axios.put(`http://localhost:5000/api/order/add/address/${id}`, {
+        userRequest.put(`/order/add/address/${id}`, {
             address: `${address.alamat}, ${address.provinsi}, ${address.kota}, ${address.kodepos}`,
             name: address.name,
             phone: address.notelp,
             email: address.email
         }).then(
-            axios.put(`http://localhost:5000/api/order/add/token/${id}`, {
+            userRequest.put(`/order/add/token/${id}`, {
                 gross_amount: cart.total + tax + ongkir
             }).then(
                 navigate(`/checkout/confirm/${id}`)
@@ -219,7 +219,7 @@ const CheckoutOne = () => {
 
     return (
         <Container>
-            <Navbar/>
+            <Navbar />
             <Wrapper>
                 <CrumbContainer>
                     <Crumb>
@@ -283,7 +283,7 @@ const CheckoutOne = () => {
                         </SubContainer>
                         <SubContainer>
                             <Estimated>Total Harga</Estimated>
-                            <Estimated>{convertRupiah(((cart.total * 10)/ 100) + cart.total)}</Estimated>
+                            <Estimated>{convertRupiah(((cart.total * 10) / 100) + cart.total)}</Estimated>
                         </SubContainer>
                         <Link to={"/katalog"}>
                             <Button>Tambah Product Lagi</Button>
@@ -292,7 +292,7 @@ const CheckoutOne = () => {
                     </SummaryContainer>
                 </CheckoutContainer>
             </Wrapper>
-            <Footer/>
+            <Footer />
         </Container>
     );
 };

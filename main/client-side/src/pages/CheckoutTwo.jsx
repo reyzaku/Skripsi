@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
 import { cartLogout } from '../redux/cartRedux';
+import { userRequest } from '../reqMethod';
 
 const Container = styled.div``
 const Wrapper = styled.div`
@@ -119,7 +120,7 @@ const Button = styled.button`
 
 
 const CheckoutTwo = () => {
-    const {id} = useParams()
+    const { id } = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.currentUser)
@@ -128,11 +129,11 @@ const CheckoutTwo = () => {
 
     useEffect(() => {
         const getOrder = async () => {
-            try{
-                const res = await axios.get(`http://localhost:5000/api/order/find/${id}`)
+            try {
+                const res = await userRequest.get(`/order/find/${id}`)
                 setOrder(res.data)
                 console.log(res.data)
-            }catch(err){
+            } catch (err) {
                 console.log("gagal")
             }
         }
@@ -146,10 +147,10 @@ const CheckoutTwo = () => {
     }
 
 
-    
+
     return (
         <Container>
-            <Navbar/>
+            <Navbar />
             <Wrapper>
                 <CrumbContainer>
                     <Crumb>
@@ -223,7 +224,7 @@ const CheckoutTwo = () => {
                     </SummaryContainer>
                 </CheckoutContainer>
             </Wrapper>
-            <Footer/>
+            <Footer />
         </Container>
     );
 };

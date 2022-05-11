@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Homepage from './pages/Homepage'
 import Profile from './pages/Profile'
 import CheckoutOne from './pages/CheckoutOne'
