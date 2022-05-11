@@ -29,10 +29,11 @@ const OrderDetail = () => {
     })
 
     const [payload, setPayload] = useState({
-        resi: ""
+        resi: "",
+        status: "Sedang Dikirim"
     })
     const [show, setShow] = useState(false)
-    const {id} = useParams()
+    const { id } = useParams()
     const [restart, setRestart] = useState(false)
 
     useEffect(() => {
@@ -72,9 +73,10 @@ const OrderDetail = () => {
         try {
             userRequest.put(`/order/${data.id}`, payload)
             window.alert("Data Berhasil Di Update")
+
             setRestart(!restart)
             setShow(false)
-        }catch{
+        } catch {
             window.alert("Data Gagal Di Update")
             setRestart(!restart)
             setShow(false)
@@ -103,7 +105,7 @@ const OrderDetail = () => {
                     <Container className='mx-auto'>
                         <Form.Group as={Col} className="mb-3">
                             <Form.Label>No. Resi :</Form.Label>
-                            <Form.Control type="text" onChange={(e) => setPayload({...payload, resi: e.target.value})}/>
+                            <Form.Control type="text" onChange={(e) => setPayload({ ...payload, resi: e.target.value })} />
                         </Form.Group>
 
                     </Container>
@@ -140,33 +142,33 @@ const OrderDetail = () => {
                             </Form.Group>
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Tanggal Pesanan :</Form.Label>
-                                <Form.Control type="text" disabled value={data.createdAt.split("T")[0]}/>
+                                <Form.Control type="text" disabled value={data.createdAt.split("T")[0]} />
                             </Form.Group>
                         </Row>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Total Transaksi :</Form.Label>
-                            <Form.Control type="text" disabled value={convertRupiah(data.amount)}/>
+                            <Form.Control type="text" disabled value={convertRupiah(data.amount)} />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Nama Penerima :</Form.Label>
-                            <Form.Control type="text" disabled value={data.name}/>
+                            <Form.Control type="text" disabled value={data.name} />
                         </Form.Group>
                         <Row>
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>No. Handphone Penerima :</Form.Label>
-                                <Form.Control type="text" disabled value={data.phone}/>
+                                <Form.Control type="text" disabled value={data.phone} />
                             </Form.Group>
 
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Email Penerima :</Form.Label>
-                                <Form.Control type="text" disabled value={data.email}/>
+                                <Form.Control type="text" disabled value={data.email} />
                             </Form.Group>
                         </Row>
                         <Form.Group className="mb-3">
                             <Form.Label>Alamat Penerima :</Form.Label>
-                            <Form.Control as="textarea" rows={6} disabled value={data.address}/>
+                            <Form.Control as="textarea" rows={6} disabled value={data.address} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Payment Link :</Form.Label>
@@ -182,14 +184,14 @@ const OrderDetail = () => {
                                     <Card.Body>
                                         <Card.Title>{product.title}</Card.Title>
                                         <Card.Text>
-                                            Ukuran: {product.size} <br/>
+                                            Ukuran: {product.size} <br />
                                             Jumlah: {product.quantity}
                                         </Card.Text>
                                         <Card.Text>
                                             {convertRupiah(product.price)}
                                         </Card.Text>
                                     </Card.Body>
-                                </Card> 
+                                </Card>
                             ))}
                         </Container>
                     </Col>
