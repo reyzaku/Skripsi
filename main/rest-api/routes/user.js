@@ -5,92 +5,92 @@ const CryptoJS = require("crypto-js");
 const { response } = require("express");
 
 // Put (Update Account Information)
-router.put("/:id", verifyToken, async (req, res)=>{
-    if(req.body.password) {
+router.put("/:id", verifyToken, async (req, res) => {
+    if (req.body.password) {
         req.body.password = CryptoJS.AES.encrypt(
-            req.body.password, 
+            req.body.password,
             process.env.PASS_HASH
         ).toString();
         console.log("router pass");
     }
-    try{
+    try {
         const updatedUser = await User.findByIdAndUpdate(
-            req.params.id, 
+            req.params.id,
             {
                 $set: req.body
             },
             { new: true }
         );
         res.status(200).json(updatedUser)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err);
     }
 });
 
 
 //Delete (Delete an Account (admin only))
-router.delete("/:id", verifyTokenAndAuthorization, async (req, res)=>{
-    try{
+router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
+    try {
         await User.findByIdAndDelete(req.params.id)
         res.status(200).json("User has been deleted!")
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 });
 
 //Get (Querying User Account (admin only))
-router.get("/find/:id", verifyToken, async (req, res)=>{
-    try{
+router.get("/find/:id", verifyToken, async (req, res) => {
+    try {
         const user = await User.findById(req.params.id)
-        const {password, ...others } = user._doc;
-        res.status(200).json({others});
+        const { password, ...others } = user._doc;
+        res.status(200).json({ others });
 
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 });
 
 // {$text: { $search: `\`${query}\`` }}
 //Get (Querying All User Account (admin only))
-router.get("/", verifyTokenAndAdmin, async (req, res)=>{
+router.get("/", verifyTokenAndAdmin, async (req, res) => {
     const query = req.query.search
     const qNew = req.query.new
-    try{
-        if(qNew) {
-            const users = qNew && await User.find().sort({createdAt: -1}).limit(5)
+    try {
+        if (qNew) {
+            const users = qNew && await User.find().sort({ createdAt: -1 }).limit(5)
             res.status(200).json(users);
         } else {
-            const users = query ? await User.find({fullName: { "$regex": query, "$options": 'i' }}) :  await User.find()
+            const users = query ? await User.find({ fullName: { "$regex": query, "$options": 'i' } }) : await User.find()
             res.status(200).json(users);
         }
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 });
 
 //Get (Query User Stats)
-router.get("/stats", verifyTokenAndAdmin, async (req, res)=>{
+router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
     const date = new Date();
     const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
 
-    try{
+    try {
         const data = await User.aggregate([
-            {$match: {createdAt: {$gte: lastYear}}},
+            { $match: { createdAt: { $gte: lastYear } } },
             {
-                $project:{
-                    month: {$month: "$createdAt" },
+                $project: {
+                    month: { $month: "$createdAt" },
                 }
             },
             {
-                $group:{
+                $group: {
                     _id: "$month",
-                    total: {$sum: 1}
+                    total: { $sum: 1 }
                 }
             }
         ])
 
         res.status(200).json(data)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 })
