@@ -1,16 +1,16 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { userRequest } from '../reqMethod';
 import OrderCard from './OrderCard'
 
 const OrderList = () => {
     const user = useSelector(state => state.user.currentUser)
     const [invoice, setInvoice] = useState([])
-    const apiUrl = `http://localhost:5000/api/order/find?userId=${user._id}`
 
     useEffect(() => {
         const getInvoice = async () => {
-            const res = await axios.get(apiUrl)
+            const res = await userRequest.get(`/order?user=${user._id}`)
             setInvoice(res.data)
             console.log(res.data)
         }

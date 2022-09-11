@@ -138,7 +138,6 @@ const Login = () => {
 
     return (
         <Container>
-            {/* <Navbar/> */}
             <Wrapper>
                 <Title>Masuk ke Aisha Collection</Title>
                 <Form>

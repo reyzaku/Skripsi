@@ -130,9 +130,9 @@ const CheckoutTwo = () => {
     useEffect(() => {
         const getOrder = async () => {
             try {
-                const res = await userRequest.get(`/order/find/${id}`)
+                const res = await userRequest.get(`/order/${id}`)
                 setOrder(res.data)
-                console.log(res.data)
+                console.log(order)
             } catch (err) {
                 console.log("gagal")
             }
@@ -191,16 +191,6 @@ const CheckoutTwo = () => {
                             <Tax>Alamat Pengiriman</Tax>
                             <Tax>{order.address}</Tax>
                         </TextContainer>
-
-                        {/* <TextContainer>
-                            <Tax>Kota</Tax>
-                            <Tax>Depok</Tax>
-                        </TextContainer>
-
-                        <TextContainer>
-                            <Tax>Kecamatan</Tax>
-                            <Tax>Beji</Tax>
-                        </TextContainer> */}
                         <ButtonContainer>
                             <Button type="thin">Edit Informasi Checkout</Button>
                             <Button onClick={startPayment}>Checkout</Button>

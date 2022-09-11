@@ -11,6 +11,7 @@ import Gambar from '../img/ProductDummy1.jpeg';
 import { addProduct } from '../redux/cartRedux';
 import { useDispatch, useSelector } from 'react-redux';
 import { convertRupiah } from '../utils/convertRupiah';
+import { userRequest } from '../reqMethod';
 
 
 
@@ -145,15 +146,15 @@ const Amount = styled.span`
 const Button = styled.button`
     width: 100%;
     color: white;
-    background: black;
+    background: ${props => props.active === "true" ? "black" : "gray"};
     cursor: pointer;
     border: none;
     padding: 10px 30px;
     transition: all 0.5s ease;
     &:hover {
         color: white;
-        transform: scale(1.05);
-        background: #8a2755;
+        transform: scale(${props => props.active === "true" ? "1.5" : "1"};);
+        background: ${props => props.active === "true" ? "#8a2755" : "gray"};
     }
 
     @media (max-width: 480px) {
@@ -170,13 +171,13 @@ const Product = (cat) => {
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState("")
     const dispatch = useDispatch()
-    const urlApi = `/product/find/${id}`
+    const urlApi = `/product/${id}`
 
     useEffect(() => {
         const getProduct = async () => {
             try {
-                const res = await axios.get(
-                    urlApi
+                const res = await userRequest.get(
+                    `/product/${id}`
                 )
                 setProduct(res.data)
                 console.log(res.data)
@@ -189,35 +190,8 @@ const Product = (cat) => {
         if (user === null) {
             navigate("/login")
         } else {
-            dispatch(addProduct({ ...product, quantity, size }))
+            dispatch(addProduct({ ...product, quantity, size, total: product.price * quantity}))
         }
-        // let userId = user.userId
-        // let token = user.token
-        // if(user === null) {
-        //     console.log("Not Authorized")
-        //     navigate("/")
-        // } else {
-        //     axios.put(`http://localhost:5000/api/cart/add/${userId}`,
-
-        //     {
-        //         userId : userId,
-        //         products : 
-        //             {
-        //                 productId: product._id,
-        //                 size: size,
-        //                 quantity: quantity,
-        //                 price: product.price,
-        //                 image: product.image
-        //             }
-        //     },
-        //     {
-        //         headers: { token: `Bearer ${token}` }
-        //     }).then(
-        //         navigate("/cart")
-        //     ).catch((err)=>{
-        //         alert(err)
-        //     })
-        // }
     }
 
     const quantityHandle = (type) => {
@@ -263,7 +237,7 @@ const Product = (cat) => {
                         {product.desc}
                     </ProductDesc>
                     <ProductPrice>
-                        {product.price}
+                        Rp. {product.price}
                     </ProductPrice>
                     <VariantContainer>
                         <SizeSelector>
@@ -284,7 +258,10 @@ const Product = (cat) => {
                             <AddAmount onClick={() => quantityHandle("inc")}><Add /></AddAmount>
                         </AmountButton>
                     </AmountContainer>
-                    <Button onClick={addToCartHandle}>Add Product to Cart</Button>
+                    {product.inStock ? 
+                        <Button active="true" onClick={addToCartHandle}>Add Product to Cart</Button> :
+                        <Button active="false">Stock Habis</Button>
+                    }
                 </InfoContainer>
             </Wrapper>
             <Newsletter />

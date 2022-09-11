@@ -6,9 +6,11 @@ import styled from 'styled-components';
 import CartCard from '../component/CartCard';
 import Footer from '../component/Footer';
 import Navbar from '../component/Navbar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { convertRupiah } from '../utils/convertRupiah';
 import { userRequest } from '../reqMethod';
+import { addQty, adjustQty, decQty, deleteItemCart, removeItem } from '../redux/cartRedux';
+import { ADJUST_QTY } from '../redux/shop/cartTypes';
 
 
 const Container = styled.div`
@@ -135,37 +137,12 @@ const SubContainer = styled.div`
 const Cart = () => {
     const user = useSelector(state => state.user.currentUser)
     const cart = useSelector(state => state.cart)
+    const [quantity, setQuantity] = useState(0)
+    const dispatch = useDispatch()
     let navigate = useNavigate()
     const tax = (cart.total * 10) / 100
     const ongkir = 4500 * cart.quantity
-    console.log(user._id)
-    console.log(cart.total)
-    // const [user, setUser] = useContext(UserContext)
-    // const [amount, setAmount] = useState(0)
-    // const [cart, setCart] = useState([])
-    // let userId = user.userId
-    // let token = user.token
-    // const urlApi = `http://localhost:5000/api/cart/find/${userId}`
 
-    // useEffect(() => {
-    //     // if(cart == null) {
-    //     axios.get(urlApi, { headers: { token: `Bearer ${token}` } }).then(res => {
-    //         let data = res.data
-    //         console.log(data)
-    //         setCart(data)
-    //     })
-    // }, []);
-
-    // const numb = 1000000;
-    // const format = numb.toString().split('').reverse().join('');
-    // const convert = format.match(/\d{1,3}/g);
-    // const rupiah = 'Rp ' + convert.join('.').split('').reverse().join('')
-
-
-    // console.log(rupiah)
-
-    // let tax = (amount * 10) / 100
-    // console.log(cart)
     const checkoutHandle = async () => {
         let date = new Date()
         let day = date.getDate()
@@ -174,14 +151,25 @@ const Cart = () => {
         let rand = Math.floor(Math.random() * 3000)
         let invoiceNum = `ORDER-${day}${month}${year}${rand}`
 
-        await userRequest.post("/order/add", {
+        await userRequest.post("/order", {
             userId: user._id,
             invoiceId: invoiceNum,
-            products: cart.products,
+            products: cart.cart,
             gross_amount: cart.total + tax + ongkir
         }).then(
             navigate(`/checkout/form/${invoiceNum}`)
         )
+    }
+
+    const deleteItem = (product) => {
+        dispatch(removeItem(product))
+        console.log(product)
+    }
+    const addQuantity = (product) => {
+        dispatch(addQty(product))
+    }
+    const decQuantity = (product) => {
+        dispatch(decQty(product))
     }
 
     return (
@@ -192,18 +180,14 @@ const Cart = () => {
                 {/* {console.log(`id: ${index + 1} productId: ${item.productId} price: Rp. ${item.price} size: ${item.size} quantity: ${item.quantity} total: ${item.total}`)} */}
                 <ProductContainer>
                     <Subtitle>Daftar Produk</Subtitle>
-                    {cart.products.map((product, index) => (
+                    {cart.cart.map((product, index) => (
                         <ProductCard key={index + 1}>
                             <Image src={product.image} />
                             <Detail>
                                 <ProductTitle>{product.title}</ProductTitle>
                                 <Variant>Ukuran : {product.size}</Variant>
                                 <Price>{convertRupiah(product.price * product.quantity)}</Price>
-                                <Counter>
-                                    <RemoveAmount><Remove /></RemoveAmount>
-                                    <Count>{product.quantity}</Count>
-                                    <AddAmount><Add /></AddAmount>
-                                </Counter>
+                                <Button onClick={() => deleteItem(product)}>delete</Button>
                             </Detail>
                         </ProductCard>
                     ))}

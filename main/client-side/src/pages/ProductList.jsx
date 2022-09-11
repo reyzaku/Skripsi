@@ -13,6 +13,8 @@ import axios from 'axios';
 import ProductGrid from '../component/ProductGrid';
 import { Row } from 'react-bootstrap';
 import ProductCard from '../component/ProductCard';
+import { userRequest } from '../reqMethod';
+import { connect } from 'react-redux';
 
 
 const Container = styled.div`
@@ -123,7 +125,7 @@ const Price = styled.p`
 
 `
 
-const ProductList = () => {
+const ProductList = ({products}) => {
 
     const location = useLocation()
     const { id } = useParams()
@@ -139,65 +141,27 @@ const ProductList = () => {
             [e.target.name]: value
         })
     }
-    let apiUrl = location.pathname === "/katalog" ? `http://localhost:5000/api/product` : `http://localhost:5000/api/product?category=${cat}`
-    console.log(location)
-    console.log(apiUrl)
+    let apiUrl = location.pathname === "/katalog" ? `/product` : `/product?category=${cat}`
     useEffect(() => {
         const getProduct = async () => {
             try {
-                const res = await axios.get(
+                const res = await userRequest.get(
                     apiUrl
                 )
                 setProduct(res.data)
             } catch (err) { }
         };
         getProduct();
-    }, [cat]);
-    // useEffect(() => {
-    //     if (product === null) {
-    //         axios.get(apiUrl)
-    //             .then(res => {
-    //                 let data = res.data
-    //                 setProduct(data.map(e => {
-    //                     return {
-    //                         id: e._id,
-    //                         title: e.title,
-    //                         image: e.image,
-    //                         price: e.price
-    //                     }
-    //                 }))
-    //             })
-    //     }
-    // }, [product, setProduct])
+    }, []);
 
     return (
         <div>
             <Navbar />
-            <FilterContainer>
-                {/* <Filter>
-                    <FilterText>Urutkan :</FilterText><br/>
-                    <FilterSelection onChange={e=>setSort(e.target.value)}>
-                        Filter
-                        <Option value="terbaru">Terbaru</Option>
-                        <Option value="asc">Harga (Termurah)</Option>
-                        <Option value="dsc">Harga (Termahal)</Option>
-                    </FilterSelection>
-
-                    <FilterText>Kategori :</FilterText><br/>
-                    <FilterSelection name='category' onChange={handleFilter}>
-                        Filter
-                        <Option></Option>
-                        <Option>Wanita</Option>
-                        <Option>Pria</Option>
-                        <Option>Anak-anak</Option>
-                    </FilterSelection>
-                </Filter>  */}
-            </FilterContainer>
             <Container>
-
                 <Row>
-
-                    {product.map((item) => (
+                    {product.filter(function(obj){
+                        return obj.inStock
+                    }).map((item) => (
                         <ProductCard item={item} key={item._id} />
                     ))}
                 </Row>
@@ -210,5 +174,8 @@ const ProductList = () => {
 
     );
 };
-
 export default ProductList;
+
+// {product.map((item) => (
+//     <ProductCard item={item} key={item._id} />
+// ))}

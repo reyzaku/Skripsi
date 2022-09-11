@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://aisha-collection.herokuapp.com/api/";
+const BASE_URL = "https://api.aishacollection.online/api/";
 // const TOKEN =
 //   JSON.parse(JSON.parse(localStorage.getItem("persist:root")).user).currentUser
 //     .accessToken || "";

@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Homepage from './pages/Homepage'
-import Profile from './pages/Profile'
+import Orders from './pages/Orders'
 import CheckoutOne from './pages/CheckoutOne'
 import CheckoutTwo from './pages/CheckoutTwo'
 import CheckoutThree from './pages/CheckoutThree'
@@ -31,10 +31,7 @@ const MainRouter = () => {
                     <Route exact path='/katalog/:category' element={<ProductList />} />
                     <Route exact path='/produk/:id' element={<Product />} />
                     <Route exact path='/cart' element={user ? <Cart /> : <Navigate to="/login" />} />
-                    {/* <LoginRoute exact path="/register" element={<Register />} />
-                    <LoginRoute exact path="/login" element={<Login />} /> */}
-                    <Route exact path='/profil' element={user ? <Profile /> : <Navigate to="/login" />} />
-                    {/* <AuthRoute exact  path="/profil" element={<Profile />} /> */}
+                    <Route exact path='/profil' element={user ? <Orders /> : <Navigate to="/login" />} />
                     <Route exact path='/checkout/form/:id' element={<CheckoutOne />} />
                     <Route exact path='/checkout/confirm/:id' element={<CheckoutTwo />} />
                     <Route exact path='/checkout/complete' element={<CheckoutThree />} />

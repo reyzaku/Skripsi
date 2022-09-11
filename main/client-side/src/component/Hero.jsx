@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import hero from '../img/hero.png'
+import hero1 from '../img/hero1.png'
+import hero2 from '../img/hero2.png'
+import hero3 from '../img/hero3.png'
 import { Carousel } from 'react-bootstrap'
 
 const Container = styled.div`
     /* width: 100%;
     text-align: center;
-    background-image: url(${hero}); */
+    background-image: url(${hero1}); */
 
     @media (max-width: 480px) {
         margin-top: 100px;
@@ -42,43 +44,55 @@ const HeroButton = styled.button`
     }
 `
 
+const Background = styled.div`
+    background: black;
+`
+
 const Hero = () => {
+    let height = 700
     return (
         <Container className='container-fluid'>
             <Carousel>
                 <Carousel.Item>
-                    <img
-                        className="d-block w-100"
-                        src={hero}
-                        alt="First slide"
-                    />
+                    <Background>
+                        <img
+                            className="d-block w-100"
+                            src={hero1}
+                            height={height}
+                            alt="First slide"
+                            style={{objectFit: "cover", objectPosition: "30% 20%", opacity: "0.7"}}
+                        />
+                    </Background>
                     <Carousel.Caption>
-                        <h3>First slide label</h3>
-                        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img
-                        className="d-block w-100"
-                        src={hero}
-                        alt="Second slide"
-                    />
-
+                    <Background>
+                        <img
+                            className="d-block w-100"
+                            src={hero2}
+                            height={height}
+                            alt="First slide"
+                            style={{objectFit: "cover", objectPosition: "30% 20%", opacity: "0.7"}}
+                        />
+                    </Background>
                     <Carousel.Caption>
-                        <h3>Second slide label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img
-                        className="d-block w-100"
-                        src={hero}
-                        alt="Third slide"
-                    />
-
+                    <Background>
+                        <img
+                            className="d-block w-100"
+                            src={hero3}
+                            height={height}
+                            alt="First slide"
+                            style={{objectFit: "cover", objectPosition: "30% 20%", opacity: "0.7"}}
+                        />
+                    </Background>
                     <Carousel.Caption>
-                        <h3>Third slide label</h3>
-                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>

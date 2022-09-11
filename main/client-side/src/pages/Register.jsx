@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../component/Navbar';
 import { UserContext } from '../context/UserContext';
+import { publicRequest, userRequest } from '../reqMethod';
 
 const Container = styled.div`
     width: 100vw;
@@ -86,8 +87,7 @@ const Register = () => {
 
     const RegisterHandle = (event) => {
         event.preventDefault()
-        console.log(input)
-        axios.post("http://localhost:5000/api/auth/register", {
+        publicRequest.post("auth/register", {
             username: input.username,
             password: input.password,
             email: input.email,

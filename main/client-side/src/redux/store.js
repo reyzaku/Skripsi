@@ -1,5 +1,7 @@
 import {configureStore, combineReducers} from "@reduxjs/toolkit"
 import cartReducer from "./cartRedux"
+// import cartReducer from "./cartReducer"
+import {composeWithDevTools} from "redux-devtools-extension"
 import userReducer from "./userRedux"
 import {
     persistStore,
@@ -19,9 +21,9 @@ const persistConfig = {
     storage,
   }
 
-  const rootReducer = combineReducers({user: userReducer, cart: cartReducer})
+const rootReducer = combineReducers({user: userReducer, cart: cartReducer})
   
-  const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer)
   
 
 

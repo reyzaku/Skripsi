@@ -76,11 +76,6 @@ const CartCard = ({item}) => {
                 <Title>test</Title>
                 <Price>Rp. {item.price}</Price>
                 <Size>{item.size}</Size>
-                <Counter>
-                    <RemoveAmount><Remove/></RemoveAmount>
-                    <Quantity>{item.quantity}</Quantity>
-                    <AddAmount><Add/></AddAmount>
-                </Counter>
             </Detail>
         </Container>
     )

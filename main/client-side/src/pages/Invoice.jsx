@@ -57,6 +57,18 @@ const Subtitle = styled.h3`
 const Text = styled.p`
     font-size: ${props => props.big === true ? "1.2em" : "1em"};
     font-weight: ${props => props.bold === true ? "600" : "400"};
+    color: ${props => {
+        switch(props.color){
+            case "confirm":
+                return "blue"
+            case "success":
+                return "green"
+            case "danger":
+                return "red"
+            default:
+                break;
+        }
+    }}
 `
 
 const Image = styled.img`
@@ -77,7 +89,7 @@ const Detail = styled.div`
     flex-direction: column;
 `
 const ProductTitle = styled.h4`
-    font-weight: 300;
+    font-weight: 500;
     font-size: 20px;
 `
 
@@ -103,7 +115,7 @@ const Invoice = () => {
 
     useEffect(() => {
         const getInvoice = async () => {
-            const res = await userRequest.get("/order")
+            const res = await userRequest.get(`/order/${id}`)
             setInvoice(res.data)
             setProduct(res.product)
             console.log(res.data)
@@ -124,7 +136,7 @@ const Invoice = () => {
                 <SubContainer>
                     <TextContainer>
                         <Text>Status</Text>
-                        <Subtitle bold={true} status={"pending"}>{invoice.status}</Subtitle>
+                        <Subtitle bold={true} status={invoice.status}>{invoice.status}</Subtitle>
                     </TextContainer>
 
                     <TextContainer>
@@ -149,6 +161,8 @@ const Invoice = () => {
                             <Detail>
                                 <ProductTitle>{product.title}</ProductTitle>
                                 <Text>Ukuran : {product.size}</Text>
+                                <Text>Jumlah : {product.quantity}</Text>
+                                <Text>Total Harga : Rp. {product.total}</Text>
                             </Detail>
                         </Container>
                     ))}
@@ -172,8 +186,8 @@ const Invoice = () => {
                     </TextContainer>
 
                     <TextContainer>
-                        <Text>No Resi : </Text>
-                        <Text>{invoice.resi}</Text>
+                        <Text color={"confirm"} bold={true}>No Resi : </Text>
+                        <Text color={"confirm"} bold={true}>{invoice.resi}</Text>
                     </TextContainer>
 
                     <TextContainer address={true}>
@@ -187,8 +201,8 @@ const Invoice = () => {
                         <Button onClick={startPayment}>Bayar Pesanan</Button>
                     }
                     {
-                        invoice.status === "dikirim" &&
-                        <Button>Track Pesanan</Button>
+                        invoice.status === "Sedang Dikirim" &&
+                        <Button onClick={() => window.open("https://www.jne.co.id/id/tracking/trace", "_blank")}>Track Pesanan</Button>
                     }
                 </SubContainer>
             </Container>
